@@ -14,15 +14,12 @@
 #' @family help
 #' @importFrom base64url base64_urldecode base64_urlencode
 #' @importFrom callr r r_bg
-#' @importFrom cli col_blue col_green col_red col_yellow make_spinner
-#'   num_ansi_colors symbol
-#' @importFrom codetools findGlobals
+#' @importFrom globals findGlobals
 #' @importFrom data.table data.table fread fwrite rbindlist set
 #' @importFrom digest digest getVDigest
 #' @importFrom igraph adjacent_vertices as_edgelist gorder
 #'   graph_from_data_frame igraph_opt igraph_options is_dag simplify topo_sort
 #'   V
-#' @importFrom knitr engine_output knit_engines
 #' @importFrom ps ps_create_time ps_handle
 #' @importFrom R6 R6Class
 #' @importFrom rlang abort as_function check_installed enquo inform

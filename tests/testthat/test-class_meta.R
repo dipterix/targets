@@ -136,28 +136,6 @@ tar_test("metadata storage is duplicated", {
   expect_equal(sort(unique(unlist(data$path))), sort(c("e")))
 })
 
-tar_test("errored targets keep old path and old format in meta", {
-  skip_if_not_installed("qs")
-  x <- target_init(name = "abc", expr = quote(123), format = "qs")
-  local_init(pipeline_init(list(x)))$run()
-  x <- target_init(
-    name = "abc",
-    expr = quote(stop(123)),
-    format = "rds",
-    error = "continue"
-  )
-  local_init(pipeline_init(list(x)))$run()
-  meta <- meta_init()
-  meta$database$preprocess(write = TRUE)
-  data <- meta$database$read_data()
-  expect_equal(data$path[[1]], NA_character_)
-  expect_equal(
-    meta$get_record("abc")$path,
-    file.path("_targets", "objects", "abc")
-  )
-  expect_equal(data$format, "qs")
-})
-
 tar_test("errored external targets keep old path and old format in meta", {
   file.create("x")
   x <- target_init(name = "abc", expr = quote("x"), format = "file")
@@ -175,23 +153,6 @@ tar_test("errored external targets keep old path and old format in meta", {
   expect_equal(data$path[[1]], "x")
   expect_equal(meta$get_record("abc")$path, "x")
   expect_equal(data$format, "file")
-})
-
-tar_test("can read metadata with a error & a non-error", {
-  skip_if_not_installed("qs")
-  targets <- list(
-    target_init(name = "abc", expr = quote(123), format = "qs"),
-    target_init(
-      name = "xyz",
-      expr = quote(stop(abc)),
-      format = "qs",
-      error = "continue"
-    )
-  )
-  local_init(pipeline_init(targets))$run()
-  data <- meta_init()$database$read_data()
-  expect_equal(nrow(data), 2L)
-  expect_equal(colnames(data), header_meta())
 })
 
 tar_test("meta$produce_depend() empty", {

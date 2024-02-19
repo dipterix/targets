@@ -19,12 +19,6 @@ message(proc.time()["elapsed"] - start)
 tar_destroy()
 px <- pprof(tar_make(reporter = "silent", callr_function = NULL))
 
-# With clustermq
-tar_destroy()
-px <- pprof(
-  tar_make_clustermq(workers = 8, reporter = "silent", callr_function = NULL)
-)
-
 # With future
 tar_destroy()
 px <- pprof(tar_make_future(reporter = "silent", callr_function = NULL))

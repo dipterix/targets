@@ -16,7 +16,7 @@
 #'   your R session after you are done editing.
 #'
 #'   For targets that run on parallel workers
-#'   created by [tar_make_clustermq()] or [tar_make_future()],
+#'   created by [tar_make_future()],
 #'   only the environment variables listed by [tar_envvars()]
 #'   are specifically exported to the targets.
 #'   For all other environment variables, you will have to set
@@ -38,7 +38,7 @@
 #'   (default: `_targets.R`) in [tar_script()].
 #'   If `TAR_ASK` is `"false"`, then `targets` overwrites the old files
 #'   with the new ones without asking. Once you are comfortable with
-#'   [tar_script()], [tar_github_actions()], and similar functions,
+#'   [tar_script()] and similar functions,
 #'   you can safely set `TAR_ASK` to `"false"` in either a project-level
 #'   or user-level `.Renviron` file.
 #' @section TAR_CONFIG:

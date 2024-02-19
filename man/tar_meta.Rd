@@ -153,7 +153,7 @@ Remarks:
 \item The \code{repository_meta} option in \code{\link[=tar_option_set]{tar_option_set()}} is actually
 what controls where the metadata lives in the cloud, but it defaults
 to \code{repository}.
-\item Like \code{\link[=tar_make]{tar_make()}}, \code{\link[=tar_make_future]{tar_make_future()}} and \code{\link[=tar_make_clustermq]{tar_make_clustermq()}}
+\item Like \code{\link[=tar_make]{tar_make()}}, \code{\link[=tar_make_future]{tar_make_future()}}
 also continuously upload metadata files to the cloud bucket
 specified in \code{resources}.
 \item \code{\link[=tar_meta_download]{tar_meta_download()}} and related functions need to run \verb{_targets.R}

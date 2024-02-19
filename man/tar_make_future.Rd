@@ -18,8 +18,7 @@ tar_make_future(
   callr_arguments = targets::tar_callr_args_default(callr_function, reporter),
   envir = parent.frame(),
   script = targets::tar_config_get("script"),
-  store = targets::tar_config_get("store"),
-  garbage_collection = targets::tar_config_get("garbage_collection")
+  store = targets::tar_config_get("store")
 )
 }
 \arguments{
@@ -140,11 +139,6 @@ is temporarily changed for the current function call.
 See \code{\link[=tar_config_get]{tar_config_get()}} and \code{\link[=tar_config_set]{tar_config_set()}} for details
 about how to set the data store path persistently
 for a project.}
-
-\item{garbage_collection}{Logical of length 1, whether to run garbage
-collection on the main process before sending a target to a worker.
-Independent from the \code{garbage_collection} argument of \code{\link[=tar_target]{tar_target()}},
-which controls garbage collection on the worker.}
 }
 \value{
 \code{NULL} except if \code{callr_function = callr::r_bg()}, in which case
@@ -162,9 +156,6 @@ that you declare your \code{future::plan()} inside the
 target script file (default: \verb{_targets.R}).
 \code{future} is not a strict dependency of \code{targets},
 so you must install \code{future} yourself.
-
-To configure \code{tar_make_future()} with a computing cluster,
-see the \code{future.batchtools} package documentation.
 }
 \section{Storage access}{
 
@@ -208,7 +199,6 @@ tar_make_future()
 }
 \seealso{
 Other pipeline: 
-\code{\link{tar_make}()},
-\code{\link{tar_make_clustermq}()}
+\code{\link{tar_make}()}
 }
 \concept{pipeline}

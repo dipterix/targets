@@ -73,7 +73,6 @@ ls() # Has "y1", "y2", and "z".
 }
 \seealso{
 Other data: 
-\code{\link{tar_crew}()},
 \code{\link{tar_load}()},
 \code{\link{tar_load_raw}()},
 \code{\link{tar_objects}()},

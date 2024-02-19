@@ -45,12 +45,9 @@ tar_poll <- function(
         file.path(store, "meta", "progress")
       )
     )
-    spinner <- cli::make_spinner()
     while (!tar_exist_progress(store = store) && tar_poll_go(start, timeout)) {
       Sys.sleep(interval)
-      spinner$spin()
     }
-    spinner$finish()
   }
   tar_assert_scalar(interval, "interval must have length 1.")
   tar_assert_dbl(interval, "interval must be numeric.")

@@ -47,7 +47,7 @@ cli_cancel <- function(
 ) {
   time <- if_any(time_stamp, time_stamp(), NULL)
   msg <- paste(c(time, "canceled", prefix, name), collapse = " ")
-  cli_yellow_box(msg, print = print)
+  mark_info(msg, print = print)
 }
 
 cli_pipeline_uptodate <- function(
@@ -113,38 +113,22 @@ cli_workspace <- function(name, time_stamp = FALSE, print = TRUE) {
 }
 
 cli_blue_bullet <- function(msg, print = TRUE) {
-  symbol <- cli_symbol_bullet_blue
-  msg <- paste(symbol, msg)
   if_any(print, message(msg), msg)
 }
 
 cli_blue_play <- function(msg, print = TRUE) {
-  symbol <- cli_symbol_play_blue
-  msg <- paste(symbol, msg)
   if_any(print, message(msg), msg)
 }
 
 cli_green_record <- function(msg, print = TRUE) {
-  symbol <- cli_symbol_record_green
-  msg <- paste(symbol, msg)
   if_any(print, message(msg), msg)
 }
 
 cli_green_check <- function(msg, print = TRUE) {
-  symbol <- cli_symbol_tick_green
-  msg <- paste(symbol, msg)
   if_any(print, message(msg), msg)
 }
 
-cli_yellow_box <- function(msg, print = TRUE) {
-  symbol <- cli_symbol_box_yellow
-  msg <- paste(symbol, msg)
-  if_any(print, message(msg), msg)
-}
-
-cli_mark_info <- function(msg, print = TRUE) {
-  symbol <- cli_symbol_info_cyan
-  msg <- paste(symbol, msg)
+mark_info <- function(msg, print = TRUE) {
   if_any(print, message(msg), msg)
 }
 
@@ -154,11 +138,6 @@ cli_blank <- function(msg, print = TRUE) {
 }
 
 cli_red_x <- function(msg, print = TRUE) {
-  old_cli_number_ansi_colors <- getOption("cli.num_colors")
-  on.exit(options(cli.num_colors = old_cli_number_ansi_colors))
-  options(cli.num_colors = cli_number_ansi_colors)
-  symbol <- cli_symbol_x_red
-  msg <- paste(symbol, cli::col_red(msg))
   if_any(print, message(msg), msg)
 }
 
@@ -181,11 +160,15 @@ cli_warned <- function(warned) {
 }
 
 cli_port <- function(host, port) {
-  cli::cli_ul()
-  cli::cli_li("url: {.path http://{host}:{port}}")
-  cli::cli_li("host: {.path {host}}")
-  cli::cli_li("port: {.path {port}}")
-  cli::cli_end()
+  w <- getOption("width", 80)
+  message(
+    appendLF = TRUE,
+    strrep("-", w - 1), "\n",
+    sprintf("url: http://%s:%s", host, port), "\n",
+    sprintf("host: %s", host), "\n",
+    sprintf("port: %s", port), "\n",
+    strrep("-", w - 1)
+  )
 }
 
 cli_df_header <- function(x, print = TRUE) {
@@ -221,11 +204,3 @@ cli_df_text <- function(x) {
   c(line1, line2)
 }
 
-cli_symbol_bullet_blue <- cli::col_blue(cli::symbol$bullet)
-cli_symbol_play_blue <- cli::col_blue(cli::symbol$play)
-cli_symbol_record_green <- cli::col_green(cli::symbol$record)
-cli_symbol_box_yellow <- cli::col_yellow(cli::symbol$stop)
-cli_symbol_info_cyan <- cli::col_cyan(cli::symbol$info)
-cli_symbol_tick_green <- cli::col_green(cli::symbol$tick)
-cli_symbol_x_red <- cli::col_red(cli::symbol$cross)
-cli_number_ansi_colors <- cli::num_ansi_colors()

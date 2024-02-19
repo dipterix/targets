@@ -139,7 +139,6 @@ y2
 }
 \seealso{
 Other data: 
-\code{\link{tar_crew}()},
 \code{\link{tar_load}()},
 \code{\link{tar_load_everything}()},
 \code{\link{tar_objects}()},

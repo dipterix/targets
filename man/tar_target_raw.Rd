@@ -88,17 +88,6 @@ for a detailed list of possible data storage formats.}
 storage. Choices:
 \itemize{
 \item \code{"local"}: file system of the local machine.
-\item \code{"aws"}: Amazon Web Services (AWS) S3 bucket. Can be configured
-with a non-AWS S3 bucket using the \code{endpoint} argument of
-\code{\link[=tar_resources_aws]{tar_resources_aws()}}, but versioning capabilities may be lost
-in doing so.
-See the cloud storage section of
-\url{https://books.ropensci.org/targets/data.html}
-for details for instructions.
-\item \code{"gcp"}: Google Cloud Platform storage bucket.
-See the cloud storage section of
-\url{https://books.ropensci.org/targets/data.html}
-for details for instructions.
 }
 
 Note: if \code{repository} is not \code{"local"} and \code{format} is \code{"file"}
@@ -114,16 +103,6 @@ of the target. Choices:
 aggregation happens with \code{vctrs::vec_c()}.
 \item \code{"list"}, branching happens with \verb{[[]]} and aggregation happens with
 \code{list()}.
-\item \code{"group"}: \code{dplyr::group_by()}-like functionality to branch over
-subsets of a non-dynamic data frame.
-For \code{iteration = "group"}, the target must not by dynamic
-(the \code{pattern} argument of \code{\link[=tar_target]{tar_target()}} must be left \code{NULL}).
-The target's return value must be a data
-frame with a special \code{tar_group} column of consecutive integers
-from 1 through the number of groups. Each integer designates a group,
-and a branch is created for each collection of rows in a group.
-See the \code{\link[=tar_group]{tar_group()}} function to see how you can
-create the special \code{tar_group} column with \code{dplyr::group_by()}.
 }}
 
 \item{error}{Character of length 1, what to do if the target
@@ -182,8 +161,7 @@ functionality, alternative data storage formats,
 and other optional capabilities of \code{targets}.
 See \code{tar_resources()} for details.}
 
-\item{storage}{Character of length 1, only relevant to
-\code{\link[=tar_make_clustermq]{tar_make_clustermq()}} and \code{\link[=tar_make_future]{tar_make_future()}}.
+\item{storage}{Character of length 1, only relevant to \code{\link[=tar_make_future]{tar_make_future()}}.
 Must be one of the following values:
 \itemize{
 \item \code{"main"}: the target's return value is sent back to the
@@ -212,8 +190,7 @@ from the data store as a dependency. As a corollary, \code{storage = "none"}
 is completely unnecessary if \code{format} is \code{"file"}.
 }}
 
-\item{retrieval}{Character of length 1, only relevant to
-\code{\link[=tar_make_clustermq]{tar_make_clustermq()}} and \code{\link[=tar_make_future]{tar_make_future()}}.
+\item{retrieval}{Character of length 1, only relevant to \code{\link[=tar_make_future]{tar_make_future()}}.
 Must be one of the following values:
 \itemize{
 \item \code{"main"}: the target's dependencies are loaded on the host machine

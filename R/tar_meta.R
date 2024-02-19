@@ -43,7 +43,7 @@
 #'   * The `repository_meta` option in [tar_option_set()] is actually
 #'     what controls where the metadata lives in the cloud, but it defaults
 #'     to `repository`.
-#'   * Like [tar_make()], [tar_make_future()] and [tar_make_clustermq()]
+#'   * Like [tar_make()], [tar_make_future()] 
 #'     also continuously upload metadata files to the cloud bucket
 #'     specified in `resources`.
 #'   * [`tar_meta_download()`] and related functions need to run `_targets.R`

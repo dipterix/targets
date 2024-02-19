@@ -86,7 +86,7 @@ Destroy the data store written by the pipeline.
 }
 \details{
 The data store is a folder created by \code{\link[=tar_make]{tar_make()}}
-(or \code{\link[=tar_make_future]{tar_make_future()}} or \code{\link[=tar_make_clustermq]{tar_make_clustermq()}}).
+(or \code{\link[=tar_make_future]{tar_make_future()}}).
 The details of the data store are explained at
 \url{https://books.ropensci.org/targets/data.html#local-data-store}.
 The data store folder contains the output data

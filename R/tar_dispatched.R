@@ -2,10 +2,6 @@
 #' @export
 #' @family progress
 #' @description List the targets with progress status `"dispatched"`.
-#' @details A target is `"dispatched"` if it is sent off to be run. Depending
-#'   on your high-performance computing configuration via the `crew` package,
-#'   the may not actually start right away. This may happen if the target
-#'   is ready to start but all available parallel workers are busy.
 #' @return A character vector of dispatched targets.
 #' @inheritParams tar_progress
 #' @param names Optional, names of the targets. If supplied, the

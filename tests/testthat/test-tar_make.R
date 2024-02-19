@@ -14,48 +14,6 @@ tar_test("tar_make() works", {
   expect_equal(out, 4L)
 })
 
-tar_test("tar_make() works with crew", {
-  skip_on_os("windows")
-  skip_on_os("solaris")
-  skip_if_not_installed("crew", minimum_version = "0.9.0")
-  skip_if_not_installed("R.utils")
-  should_skip <- identical(tolower(Sys.info()[["sysname"]]), "windows") &&
-    isTRUE(as.logical(Sys.getenv("CI")))
-  if (should_skip) {
-    skip("skipping on Windows CI.")
-  }
-  tar_script({
-    tar_option_set(
-      controller = crew::crew_controller_local(
-        host = "127.0.0.1",
-        seconds_interval = 0.5
-      ),
-      backoff = tar_backoff(min = 0.5, max = 0.5)
-    )
-    tar_target(
-      x,
-      TRUE,
-      memory = "transient",
-      garbage_collection = TRUE
-    )
-  })
-  on.exit({
-    gc()
-    crew_test_sleep()
-  })
-  expect_error(tar_crew(), class = "tar_condition_validate")
-  R.utils::withTimeout(
-    tar_make(
-      reporter = "silent",
-      callr_function = NULL,
-      garbage_collection = TRUE
-    ),
-    timeout = 360
-  )
-  out <- tar_read(x)
-  expect_equal(out, TRUE)
-  expect_true(is.data.frame(tar_crew()))
-})
 
 tar_test("empty tar_make() works even with names", {
   skip_cran()

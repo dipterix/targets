@@ -12,20 +12,6 @@
 #' @examples
 #' if (identical(Sys.getenv("TAR_EXAMPLES"), "true")) { # for CRAN
 #' tar_dir({ # tar_dir() runs code from a temp dir for CRAN.
-#' tar_script({
-#>   tar_option_set(
-#>     resources = tar_resources(
-#>       aws = tar_resources_aws(
-#>         bucket = "YOUR_BUCKET_NAME",
-#>         prefix = "YOUR_PROJECT_NAME"
-#>       )
-#>     ),
-#>     repository = "aws"
-#>   )
-#>   list(
-#>     tar_target(x, data.frame(x = seq_len(2), y = seq_len(2)))
-#>   )
-#' }, ask = FALSE)
 #' tar_make()
 #' tar_meta_download()
 #' })
@@ -34,7 +20,6 @@ tar_meta_download <- function(
   meta = TRUE,
   progress = TRUE,
   process = TRUE,
-  crew = TRUE,
   verbose = TRUE,
   strict = FALSE,
   script = targets::tar_config_get("script"),
@@ -49,9 +34,6 @@ tar_meta_download <- function(
   tar_assert_lgl(process)
   tar_assert_scalar(process)
   tar_assert_none_na(process)
-  tar_assert_lgl(crew)
-  tar_assert_scalar(crew)
-  tar_assert_none_na(crew)
   tar_assert_lgl(verbose)
   tar_assert_scalar(verbose)
   tar_assert_none_na(verbose)
@@ -86,12 +68,6 @@ tar_meta_download <- function(
   }
   if (process) {
     database_process(path_store = store)$nice_download(
-      verbose = verbose,
-      strict = strict
-    )
-  }
-  if (crew) {
-    database_crew(path_store = store)$nice_download(
       verbose = verbose,
       strict = strict
     )

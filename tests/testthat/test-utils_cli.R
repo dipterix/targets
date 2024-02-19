@@ -68,14 +68,10 @@ tar_test("cli_green_check()", {
   expect_message(cli_green_check("x"))
 })
 
-tar_test("cli_yellow_box()", {
-  skip_cran()
-  expect_message(cli_yellow_box("x"))
-})
 
-tar_test("cli_mark_info()", {
+tar_test("mark_info()", {
   skip_cran()
-  expect_message(cli_mark_info("x"))
+  expect_message(mark_info("x"))
 })
 
 tar_test("cli_blank()", {

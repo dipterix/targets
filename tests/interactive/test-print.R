@@ -1,13 +1,13 @@
 tar_test("print stem", {
-  resources <- tar_resources(
-    clustermq = tar_resources_clustermq(
-      template = list(cpu = 1, mem = 2)
-    )
-  )
+  # resources <- tar_resources(
+  #   clustermq = tar_resources_clustermq(
+  #     template = list(cpu = 1, mem = 2)
+  #   )
+  # )
   x <- tar_target(x, {
     a <- 1
     b
-  }, resources = resources)
+  })
   print(x)
   expect_equal(1, 1)
 })
@@ -49,20 +49,6 @@ tar_test("print cue", {
   expect_equal(1, 1)
 })
 
-tar_test("print aws resources", {
-  print(resources_aws_init(bucket = "bucket_name"))
-  expect_equal(1, 1)
-})
-
-tar_test("print clustermq resources", {
-  print(resources_clustermq_init(template = list(a = 1)))
-  expect_equal(1, 1)
-})
-
-tar_test("print feather resources", {
-  print(resources_feather_init(compression = "zstd"))
-  expect_equal(1, 1)
-})
 
 tar_test("print fst resources", {
   print(resources_fst_init(compress = 50))
@@ -71,16 +57,6 @@ tar_test("print fst resources", {
 
 tar_test("print future resources", {
   print(resources_future_init(resources = list(a = 1)))
-  expect_equal(1, 1)
-})
-
-tar_test("print parquet resources", {
-  print(resources_parquet_init(compression = "zstd"))
-  expect_equal(1, 1)
-})
-
-tar_test("print qs resources", {
-  print(resources_qs_init(preset = "high"))
   expect_equal(1, 1)
 })
 

@@ -8,7 +8,6 @@ tar_meta_sync(
   meta = TRUE,
   progress = TRUE,
   process = TRUE,
-  crew = TRUE,
   verbose = TRUE,
   prefer_local = TRUE,
   script = targets::tar_config_get("script"),
@@ -24,9 +23,6 @@ at \verb{_targets/meta/meta}.}
 
 \item{process}{Logical of length 1, whether to process the process file at
 \verb{_targets/meta/process}.}
-
-\item{crew}{Logical of length 1, whether to process the \code{crew} file at
-\verb{_targets/meta/crew}. Only exists if running \code{targets} with \code{crew}.}
 
 \item{verbose}{Logical of length 1, whether to print informative
 console messages.}
@@ -74,8 +70,6 @@ which copy takes precedence.
 \examples{
 if (identical(Sys.getenv("TAR_EXAMPLES"), "true")) { # for CRAN
 tar_dir({ # tar_dir() runs code from a temp dir for CRAN.
-tar_script({
-}, ask = FALSE)
 tar_make()
 tar_meta_sync()
 })

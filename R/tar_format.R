@@ -103,59 +103,6 @@
 #'   returning the original object without any modifications.
 #' @param repository Deprecated. Use the `repository` argument of
 #'   [tar_target()] or [tar_option_set()] instead.
-#' @examples
-#' # The following target is equivalent to the current superseded
-#' # tar_target(name, command(), format = "keras").
-#' # An improved version of this would supply a `convert` argument
-#' # to handle NULL objects, which are returned by the target if it
-#' # errors and the error argument of tar_target() is "null".
-#' tar_target(
-#'   name = keras_target,
-#'   command = your_function(),
-#'   format = tar_format(
-#'     read = function(path) {
-#'       keras::load_model_hdf5(path)
-#'     },
-#'     write = function(object, path) {
-#'       keras::save_model_hdf5(object = object, filepath = path)
-#'     },
-#'     marshal = function(object) {
-#'       keras::serialize_model(object)
-#'     },
-#'     unmarshal = function(object) {
-#'       keras::unserialize_model(object)
-#'     }
-#'   )
-#' )
-#' # And the following is equivalent to the current superseded
-#' # tar_target(name, torch::torch_tensor(seq_len(4)), format = "torch"),
-#' # except this version has a `convert` argument to handle
-#' # cases when `NULL` is returned (e.g. if the target errors out
-#' # and the `error` argument is "null" in tar_target()
-#' # or tar_option_set())
-#' tar_target(
-#'   name = torch_target,
-#'   command = torch::torch_tensor(),
-#'   format = tar_format(
-#'     read = function(path) {
-#'       torch::torch_load(path)
-#'     },
-#'     write = function(object, path) {
-#'       torch::torch_save(obj = object, path = path)
-#'     },
-#'     marshal = function(object) {
-#'       con <- rawConnection(raw(), open = "wr")
-#'       on.exit(close(con))
-#'       torch::torch_save(object, con)
-#'       rawConnectionValue(con)
-#'     },
-#'     unmarshal = function(object) {
-#'       con <- rawConnection(object, open = "r")
-#'       on.exit(close(con))
-#'       torch::torch_load(con)
-#'     }
-#'   )
-#' )
 tar_format <- function(
   read = NULL,
   write = NULL,

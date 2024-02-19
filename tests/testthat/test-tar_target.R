@@ -51,20 +51,10 @@ tar_test("declaring a target does not run its command", {
 })
 
 tar_test("superseded ultra-custom formats and error null", {
-  for (format in c("keras", "torch")) {
-    expect_warning(
-      tmp <- tar_target(x, "y", format = format, error = "null"),
-      class = "tar_condition_deprecate"
-    )
-  }
-  for (format in c("rds", "qs")) {
+  for (format in c("rds")) {
     expect_silent(
       tmp <- tar_target(x, "y", format = format, error = "null")
     )
   }
 })
 
-tar_test("url format has local repository", {
-  target <- tar_target(x, 1, repository = "aws", format = "url")
-  expect_equal(target$settings$repository,  "local")
-})

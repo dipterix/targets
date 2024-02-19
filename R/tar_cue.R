@@ -52,7 +52,7 @@
 #'      using `targets:::mask_pointers()`. Such pointers arise from
 #'      inline compiled C/C++ functions.
 #'    1. Using static code analysis (i.e. [tar_deps()], which is based on
-#'      `codetools::findGlobals()`) identify any user-defined functions
+#'      `globals::findGlobals()`) identify any user-defined functions
 #'      and global objects that the current function depends on.
 #'      Append the hashes of those dependencies to the string representation
 #'      of the current function.

@@ -175,13 +175,4 @@ tar_target_raw <- function(
 }
 
 warn_error_format <- function(error, format) {
-  if (format %in% c("keras", "torch") && error == "null") {
-    message <- paste0(
-      "In targets, format = \"",
-      format,
-      "\" is incompatible with error = \"null\" ",
-      "(and superseded by tar_format())."
-    )
-    tar_warn_deprecate(message)
-  }
 }

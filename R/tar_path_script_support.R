@@ -1,3 +1,4 @@
+
 #' @title Directory path to the support scripts
 #'   of the current target script
 #' @export
@@ -31,5 +32,6 @@
 #' })
 #' }
 tar_path_script_support <- function() {
-  paste0(tools::file_path_sans_ext(tar_path_script()), "_r")
+  paste0(file_path_sans_ext(tar_path_script()), "_r")
 }
+

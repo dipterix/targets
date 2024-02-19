@@ -23,24 +23,6 @@ database_init <- function(
       list_column_modes = list_column_modes,
       resources = resources
     ),
-    aws = database_aws_new(
-      memory = memory,
-      path = path,
-      key = key,
-      header = header,
-      list_columns = list_columns,
-      list_column_modes = list_column_modes,
-      resources = resources
-    ),
-    gcp = database_gcp_new(
-      memory = memory,
-      path = path,
-      key = key,
-      header = header,
-      list_columns = list_columns,
-      list_column_modes = list_column_modes,
-      resources = resources
-    ),
     tar_throw_validate(
       "unsupported repository \"",
       repository,
@@ -179,7 +161,7 @@ database_class <- R6::R6Class(
       while (!is.null(try(self$try_append_lines(lines), silent = in_test()))) {
         compare_working_directories()
         msg <- paste("Reattempting to append lines to", self$path)
-        cli_mark_info(msg)
+        mark_info(msg)
         Sys.sleep(stats::runif(1, 0.2, 0.25))
         attempt <- attempt + 1L
         if (attempt > max_attempts) {

@@ -42,9 +42,7 @@ is just itself.
 \item \code{progress}: the most recent progress update of that target.
 Could be \code{"dispatched"}, \code{"completed"}, "\code{skipped}", \code{"canceled"},
 or \code{"errored"}. \code{"dispatched"} means the target was sent off
-to be run, but in the case of \code{tar_make()} with a \code{crew} controller,
-the target might not actually start running right away if the \code{crew}
-workers are all busy.
+to be run.
 }
 }
 \description{
@@ -101,9 +99,6 @@ Other progress:
 \code{\link{tar_poll}()},
 \code{\link{tar_progress_branches}()},
 \code{\link{tar_progress_summary}()},
-\code{\link{tar_skipped}()},
-\code{\link{tar_watch}()},
-\code{\link{tar_watch_server}()},
-\code{\link{tar_watch_ui}()}
+\code{\link{tar_skipped}()}
 }
 \concept{progress}

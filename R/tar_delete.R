@@ -10,11 +10,6 @@
 #'   and `repository = "local"`) are not deleted.
 #'   For targets with `repository` not equal `"local"`, `tar_delete()` attempts
 #'   to delete the file and errors out if the deletion is unsuccessful.
-#'   If deletion fails, either log into the cloud platform
-#'   and manually delete the file (e.g. the AWS web console
-#'   in the case of `repository = "aws"`) or call
-#'   [tar_invalidate()] on that target so that `targets`
-#'   does not try to delete the object.
 #'   For patterns recorded in the metadata, all the branches
 #'   will be deleted. For patterns no longer in the metadata,
 #'   branches are left alone.
@@ -24,9 +19,7 @@
 #' @param names Names of the targets to remove from `_targets/objects/`.
 #'   You can supply symbols
 #'   or `tidyselect` helpers like [any_of()] and [starts_with()].
-#' @param cloud Logical of length 1, whether to delete objects
-#'   from the cloud if applicable (e.g. AWS, GCP). If `FALSE`,
-#'   files are not deleted from the cloud.
+#' @param cloud Ignored
 #' @param batch_size Positive integer between 1 and 1000,
 #'   number of target objects to delete
 #'   from the cloud with each HTTP API request.
@@ -58,6 +51,7 @@ tar_delete <- function(
   verbose = TRUE,
   store = targets::tar_config_get("store")
 ) {
+  cloud <- FALSE
   tar_assert_allow_meta("tar_delete", store)
   tar_assert_store(store = store)
   tar_assert_path(path_meta(store))
@@ -85,46 +79,9 @@ tar_delete <- function(
   local_dynamic_files <- meta$name[index_local_dynamic_files]
   names <- setdiff(names, local_dynamic_files)
   names <- setdiff(names, meta$name[meta$type == "pattern"])
-  if (cloud) {
-    tar_delete_cloud_objects(
-      names = names,
-      meta = meta,
-      path_store = store,
-      batch_size = batch_size,
-      verbose = verbose
-    )
-  }
   files <- list.files(path_objects_dir(store), all.files = TRUE)
   discard <- intersect(names, files)
   unlink(file.path(path_objects_dir(store), discard), recursive = TRUE)
   invisible()
 }
 
-# Tested in tests/aws/test-delete.R
-# nocov start
-tar_delete_cloud_objects <- function(
-  names,
-  meta,
-  path_store,
-  batch_size,
-  verbose
-) {
-  tar_message_meta(store = path_store)
-  index_cloud <- !is.na(meta$repository) & (meta$repository != "local")
-  meta <- meta[index_cloud,, drop = FALSE] # nolint
-  meta <- meta[meta$name %in% names,, drop = FALSE] # nolint
-  meta <- meta[meta$type != "pattern",, drop = FALSE] # nolint
-  for (repository in unique(meta$repository)) {
-    subset <- meta[meta$repository == repository,, drop = FALSE] # nolint
-    row <- subset[1L,, drop = FALSE] # nolint
-    record <- record_from_row(row = row, path_store = path_store)
-    store <- record_bootstrap_store(record)
-    store_delete_objects(
-      store = store,
-      meta = subset,
-      batch_size = batch_size,
-      verbose = verbose
-    )
-  }
-}
-# nocov end

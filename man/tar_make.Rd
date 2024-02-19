@@ -16,11 +16,7 @@ tar_make(
   callr_arguments = targets::tar_callr_args_default(callr_function, reporter),
   envir = parent.frame(),
   script = targets::tar_config_get("script"),
-  store = targets::tar_config_get("store"),
-  garbage_collection = targets::tar_config_get("garbage_collection"),
-  use_crew = targets::tar_config_get("use_crew"),
-  terminate_controller = TRUE,
-  as_job = targets::tar_config_get("as_job")
+  store = targets::tar_config_get("store")
 )
 }
 \arguments{
@@ -138,38 +134,6 @@ is temporarily changed for the current function call.
 See \code{\link[=tar_config_get]{tar_config_get()}} and \code{\link[=tar_config_set]{tar_config_set()}} for details
 about how to set the data store path persistently
 for a project.}
-
-\item{garbage_collection}{Logical of length 1. For a \code{crew}-integrated
-pipeline, whether to run garbage collection on the main process
-before sending a target
-to a worker. Ignored if \code{tar_option_get("controller")} is \code{NULL}.
-Independent from the \code{garbage_collection} argument of \code{\link[=tar_target]{tar_target()}},
-which controls garbage collection on the worker.}
-
-\item{use_crew}{Logical of length 1, whether to use \code{crew} if the
-\code{controller} option is set in \code{tar_option_set()} in the target script
-(\verb{_targets.R}). See \url{https://books.ropensci.org/targets/crew.html}
-for details.}
-
-\item{terminate_controller}{Logical of length 1. For a \code{crew}-integrated
-pipeline, whether to terminate the controller after stopping
-or finishing the pipeline. This should almost always be set to \code{TRUE},
-but \code{FALSE} combined with \code{callr_function = NULL}
-will allow you to get the running controller using
-\code{tar_option_get("controller")} for debugging purposes.
-For example, \code{tar_option_get("controller")$summary()} produces a
-worker-by-worker summary of the work assigned and completed,
-\code{tar_option_get("controller")$queue} is the list of unresolved tasks,
-and \code{tar_option_get("controller")$results} is the list of
-tasks that completed but were not collected with \code{pop()}.
-You can manually terminate the controller with
-\code{tar_option_get("controller")$summary()} to close down the dispatcher
-and worker processes.}
-
-\item{as_job}{\code{TRUE} to run as an RStudio IDE / Posit Workbench job,
-\code{FALSE} to run as a \code{callr} process in the main R session
-(depending on the \code{callr_function} argument).
-If \code{as_job} is \code{TRUE}, then the \code{rstudioapi} package must be installed.}
 }
 \value{
 \code{NULL} except if \code{callr_function = callr::r_bg()}, in which case
@@ -222,24 +186,11 @@ tar_script({
   )
 }, ask = FALSE)
 tar_make(starts_with("y")) # Only processes y1 and y2.
-# Distributed computing with crew:
-if (requireNamespace("crew", quietly = TRUE)) {
-tar_script({
-  tar_option_set(controller = crew::controller_local())
-  list(
-    tar_target(y1, 1 + 1),
-    tar_target(y2, 1 + 1),
-    tar_target(z, y1 + y2)
-  )
-}, ask = FALSE)
-tar_make()
-}
 })
 }
 }
 \seealso{
 Other pipeline: 
-\code{\link{tar_make_clustermq}()},
 \code{\link{tar_make_future}()}
 }
 \concept{pipeline}

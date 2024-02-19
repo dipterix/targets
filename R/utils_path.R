@@ -1,9 +1,16 @@
+file_path_sans_ext <- function (x, compression = FALSE) {
+  if (compression) {
+    x <- sub("[.](gz|bz2|xz)$", "", x)
+  }
+  sub("([^.]+)\\.[[:alnum:]]+$", "\\1", x)
+}
+
 path_script_default <- function() {
   "_targets.R"
 }
 
 path_script_r <- function(path_script) {
-  paste0(tools::file_path_sans_ext(path_script), "_r")
+  paste0(file_path_sans_ext(path_script), "_r")
 }
 
 path_script_r_globals_dir <- function(path_script) {
@@ -60,10 +67,6 @@ path_progress <- function(path_store) {
 
 path_process <- function(path_store) {
   file.path(path_meta_dir(path_store), "process")
-}
-
-path_crew <- function(path_store) {
-  file.path(path_meta_dir(path_store), "crew")
 }
 
 path_scratch <- function(path_store, pattern = "tmp") {

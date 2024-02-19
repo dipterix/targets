@@ -66,15 +66,6 @@
 #' tar_option_reset()
 tar_renv <- function(
   extras = c(
-    "bs4Dash",
-    "crew",
-    "gt",
-    "markdown",
-    "pingr",
-    "rstudioapi",
-    "shiny",
-    "shinybusy",
-    "shinyWidgets",
     "visNetwork"
   ),
   path = "_targets_packages.R",

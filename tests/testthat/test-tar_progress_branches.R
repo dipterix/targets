@@ -63,20 +63,6 @@ tar_test("tar_progress_branches() with fields", {
   expect_equal(out, exp)
 })
 
-tar_test("tar_progress_branches_gt() runs without error.", {
-  skip_cran()
-  skip_if_not_installed("gt")
-  tar_script({
-    list(
-      tar_target(x, seq_len(1)),
-      tar_target(y, x, pattern = map(x))
-    )
-  }, ask = FALSE)
-  tar_make(callr_function = NULL)
-  out <- tar_progress_branches_gt(path_store_default())
-  expect_true(inherits(out, "gt_tbl"))
-})
-
 tar_test("custom script and store args", {
   skip_cran()
   expect_equal(tar_config_get("script"), path_script_default())

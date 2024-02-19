@@ -73,17 +73,6 @@ for a detailed list of possible data storage formats.}
 storage. Choices:
 \itemize{
 \item \code{"local"}: file system of the local machine.
-\item \code{"aws"}: Amazon Web Services (AWS) S3 bucket. Can be configured
-with a non-AWS S3 bucket using the \code{endpoint} argument of
-\code{\link[=tar_resources_aws]{tar_resources_aws()}}, but versioning capabilities may be lost
-in doing so.
-See the cloud storage section of
-\url{https://books.ropensci.org/targets/data.html}
-for details for instructions.
-\item \code{"gcp"}: Google Cloud Platform storage bucket.
-See the cloud storage section of
-\url{https://books.ropensci.org/targets/data.html}
-for details for instructions.
 }
 
 Note: if \code{repository} is not \code{"local"} and \code{format} is \code{"file"}
@@ -99,16 +88,6 @@ of the target. Choices:
 aggregation happens with \code{vctrs::vec_c()}.
 \item \code{"list"}, branching happens with \verb{[[]]} and aggregation happens with
 \code{list()}.
-\item \code{"group"}: \code{dplyr::group_by()}-like functionality to branch over
-subsets of a non-dynamic data frame.
-For \code{iteration = "group"}, the target must not by dynamic
-(the \code{pattern} argument of \code{\link[=tar_target]{tar_target()}} must be left \code{NULL}).
-The target's return value must be a data
-frame with a special \code{tar_group} column of consecutive integers
-from 1 through the number of groups. Each integer designates a group,
-and a branch is created for each collection of rows in a group.
-See the \code{\link[=tar_group]{tar_group()}} function to see how you can
-create the special \code{tar_group} column with \code{dplyr::group_by()}.
 }}
 
 \item{error}{Character of length 1, what to do if the target
@@ -167,8 +146,7 @@ functionality, alternative data storage formats,
 and other optional capabilities of \code{targets}.
 See \code{tar_resources()} for details.}
 
-\item{storage}{Character of length 1, only relevant to
-\code{\link[=tar_make_clustermq]{tar_make_clustermq()}} and \code{\link[=tar_make_future]{tar_make_future()}}.
+\item{storage}{Character of length 1, only relevant to \code{\link[=tar_make_future]{tar_make_future()}}.
 Must be one of the following values:
 \itemize{
 \item \code{"main"}: the target's return value is sent back to the
@@ -197,8 +175,7 @@ from the data store as a dependency. As a corollary, \code{storage = "none"}
 is completely unnecessary if \code{format} is \code{"file"}.
 }}
 
-\item{retrieval}{Character of length 1, only relevant to
-\code{\link[=tar_make_clustermq]{tar_make_clustermq()}} and \code{\link[=tar_make_future]{tar_make_future()}}.
+\item{retrieval}{Character of length 1, only relevant to \code{\link[=tar_make_future]{tar_make_future()}}.
 Must be one of the following values:
 \itemize{
 \item \code{"main"}: the target's dependencies are loaded on the host machine
@@ -249,21 +226,6 @@ details the structure and composition of target objects.
 \itemize{
 \item \code{"rds"}: Default, uses \code{saveRDS()} and \code{readRDS()}. Should work for
 most objects, but slow.
-\item \code{"qs"}: Uses \code{qs::qsave()} and \code{qs::qread()}. Should work for
-most objects, much faster than \code{"rds"}. Optionally set the
-preset for \code{qsave()} through \code{tar_resources()} and \code{tar_resources_qs()}.
-\item \code{"feather"}: Uses \code{arrow::write_feather()} and
-\code{arrow::read_feather()} (version 2.0). Much faster than \code{"rds"},
-but the value must be a data frame. Optionally set
-\code{compression} and \code{compression_level} in \code{arrow::write_feather()}
-through \code{tar_resources()} and \code{tar_resources_feather()}.
-Requires the \code{arrow} package (not installed by default).
-\item \code{"parquet"}: Uses \code{arrow::write_parquet()} and
-\code{arrow::read_parquet()} (version 2.0). Much faster than \code{"rds"},
-but the value must be a data frame. Optionally set
-\code{compression} and \code{compression_level} in \code{arrow::write_parquet()}
-through \code{tar_resources()} and \code{tar_resources_parquet()}.
-Requires the \code{arrow} package (not installed by default).
 \item \code{"fst"}: Uses \code{fst::write_fst()} and \code{fst::read_fst()}.
 Much faster than \code{"rds"}, but the value must be
 a data frame. Optionally set the compression level for
@@ -275,17 +237,6 @@ against the global effects of in-place modification.
 Optionally set the compression level the same way as for \code{"fst"}.
 \item \code{"fst_tbl"}: Same as \code{"fst"}, but the value is a \code{tibble}.
 Optionally set the compression level the same way as for \code{"fst"}.
-\item \code{"keras"}: superseded by \code{\link[=tar_format]{tar_format()}} and incompatible
-with \code{error = "null"} (in \code{\link[=tar_target]{tar_target()}} or \code{\link[=tar_option_set]{tar_option_set()}}).
-Uses \code{keras::save_model_hdf5()} and
-\code{keras::load_model_hdf5()}. The value must be a Keras model.
-Requires the \code{keras} package (not installed by default).
-\item \code{"torch"}: superseded by \code{\link[=tar_format]{tar_format()}} and incompatible
-with \code{error = "null"} (in \code{\link[=tar_target]{tar_target()}} or \code{\link[=tar_option_set]{tar_option_set()}}).
-Uses \code{torch::torch_save()} and \code{torch::torch_load()}.
-The value must be an object from the \code{torch} package
-such as a tensor or neural network module.
-Requires the \code{torch} package (not installed by default).
 \item \code{"file"}: A dynamic file. To use this format,
 the target needs to manually identify or save some data
 and return a character vector of paths

@@ -1,9 +1,0 @@
-#$ -N targets-{{ job_name }}
-#$ -t 1-{{ n_jobs }}
-#$ -j y
-#$ -o /dev/null
-#$ -cwd
-#$ -V
-#$ -pe smp {{ cores | 1 }}
-module load R/4.2.2
-CMQ_AUTH={{ auth }} R --no-save --no-restore -e 'clustermq:::worker("{{ master }}")'

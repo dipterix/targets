@@ -154,38 +154,6 @@ tar_test("list aggregation", {
   )
 })
 
-tar_test("group iteration", {
-  pipeline <- pipeline_init(
-    list(
-      target_init(
-        name = "data",
-        expr = quote(
-          data.frame(
-            x = seq_len(6),
-            tar_group = rep(seq_len(3), each = 2)
-          )
-        ),
-        iteration = "group"
-      ),
-      target_init(
-        name = "map",
-        expr = quote(sum(data$x)),
-        pattern = quote(map(data)),
-        iteration = "vector"
-      ),
-      target_init(
-        name = "combine",
-        expr = quote(map)
-      )
-    )
-  )
-  local <- local_init(pipeline)
-  local$run()
-  out <- target_read_value(pipeline_get_target(pipeline, "combine"))$object
-  expect_true(is.data.frame(tar_read(data)))
-  expect_equiv(out, c(3L, 7L, 11L))
-})
-
 tar_test("error relaying", {
   pipeline <- pipeline_init(
     list(

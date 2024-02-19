@@ -256,13 +256,6 @@ tar_test("tar_assert_resources()", {
     tar_assert_resources(list(a = 1)),
     class = "tar_condition_deprecate"
   )
-  skip_if_not_installed("paws.storage")
-  expect_warning(
-    tar_assert_resources(list(aws = 1)),
-    class = "tar_condition_deprecate"
-  )
-  aws <- tar_resources_aws(bucket = "bucket", prefix = "x")
-  expect_silent(tar_assert_resources(tar_resources(aws = aws)))
 })
 
 tar_test("tar_assert_store()", {
@@ -401,11 +394,6 @@ tar_test("tar_assert_allow_meta()", {
   tar_runtime$target <- tar_target(x, 1, format = "file", repository = "local")
   tar_runtime$store <- store
   expect_null(tar_assert_allow_meta("fun", store))
-  tar_runtime$target <- tar_target(x, 1, format = "rds", repository = "aws")
-  expect_error(
-    tar_assert_allow_meta("fun", store),
-    class = "tar_condition_validate"
-  )
 })
 
 tar_test("tar_message_meta()", {

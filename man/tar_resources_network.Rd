@@ -44,17 +44,6 @@ is a helper to supply those settings in the correct manner.
 
 In \code{targets} version 0.12.2 and above, resources are inherited one-by-one
 in nested fashion from \code{tar_option_get("resources")}.
-For example, suppose you set
-\code{tar_option_set(resources = tar_resources(aws = my_aws))},
-where \code{my_aws} equals \code{tar_resources_aws(bucket = "x", prefix = "y")}.
-Then, \verb{tar_target(data, get_data()} will have bucket \code{"x"} and
-prefix \code{"y"}. In addition, if \code{new_resources} equals
-\verb{tar_resources(aws = tar_resources_aws(bucket = "z")))}, then
-\code{tar_target(data, get_data(), resources = new_resources)}
-will use the new bucket \code{"z"}, but it will still use the prefix \code{"y"}
-supplied through \code{tar_option_set()}. (In \code{targets} 0.12.1 and below,
-options like \code{prefix} do not carry over from \code{tar_option_set()} if you
-supply non-default resources to \code{tar_target()}.)
 }
 
 \examples{
@@ -73,15 +62,8 @@ tar_target(
 \seealso{
 Other resources: 
 \code{\link{tar_resources}()},
-\code{\link{tar_resources_aws}()},
-\code{\link{tar_resources_clustermq}()},
-\code{\link{tar_resources_crew}()},
-\code{\link{tar_resources_feather}()},
 \code{\link{tar_resources_fst}()},
 \code{\link{tar_resources_future}()},
-\code{\link{tar_resources_gcp}()},
-\code{\link{tar_resources_parquet}()},
-\code{\link{tar_resources_qs}()},
 \code{\link{tar_resources_url}()}
 }
 \concept{resources}

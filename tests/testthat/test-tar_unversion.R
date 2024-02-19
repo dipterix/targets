@@ -66,6 +66,4 @@ tar_test("tar_unversion()", {
   expect_false(before[index] == after[index])
   expect_equal(after[index], "version=")
   expect_gt(nchar(before[index]), nchar(after[index]))
-  expect_equal(nchar(store_aws_version(before)), 32L)
-  expect_null(store_aws_version(after))
 })

@@ -22,16 +22,7 @@ target_init <- function(
   seed <- tar_seed_create(name)
   command <- command_init(expr, packages, library, seed, deps, string)
   cue <- cue %|||% cue_init()
-  if (any(grepl("^aws_", format))) {
-    format <- gsub("^aws_", "", format)
-    repository <- "aws"
-  }
-  if (identical(format, "url")) {
-    repository <- "local"
-  }
-  if (store_custom_old_repository(format) == "aws") {
-    repository <- "aws"
-  }
+  repository <- "local"
   settings <- settings_init(
     name = name,
     format = format,

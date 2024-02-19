@@ -34,7 +34,7 @@ Modify the project-level \code{.Renviron} file with
 your R session after you are done editing.
 
 For targets that run on parallel workers
-created by \code{\link[=tar_make_clustermq]{tar_make_clustermq()}} or \code{\link[=tar_make_future]{tar_make_future()}},
+created by \code{\link[=tar_make_future]{tar_make_future()}},
 only the environment variables listed by \code{\link[=tar_envvars]{tar_envvars()}}
 are specifically exported to the targets.
 For all other environment variables, you will have to set
@@ -50,7 +50,7 @@ before overwriting certain files, such as the target script file
 (default: \verb{_targets.R}) in \code{\link[=tar_script]{tar_script()}}.
 If \code{TAR_ASK} is \code{"false"}, then \code{targets} overwrites the old files
 with the new ones without asking. Once you are comfortable with
-\code{\link[=tar_script]{tar_script()}}, \code{\link[=tar_github_actions]{tar_github_actions()}}, and similar functions,
+\code{\link[=tar_script]{tar_script()}} and similar functions,
 you can safely set \code{TAR_ASK} to \code{"false"} in either a project-level
 or user-level \code{.Renviron} file.
 }

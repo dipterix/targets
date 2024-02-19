@@ -164,7 +164,7 @@ tar_test("prevent high-memory data via target objects", {
   # Run this test once inside tar_test() (test environment)
   # and once outside tar_test() global environment.
   future::plan(future.callr::callr)
-  t <- list(tar_target(x, runif(1e7), deployment = "main", format = "qs"))
+  t <- list(tar_target(x, runif(1e7), deployment = "main"))
   pipeline <- pipeline_init(list(t[[1]], tar_target(y, x)))
   algo <- future_init(pipeline)
   debug(algo$ensure_exports)

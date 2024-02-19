@@ -3,148 +3,6 @@ tar_test("validate default options", {
   expect_silent(x$validate())
 })
 
-tar_test("validate non-default options", {
-  x <- options_init(
-    tidy_eval = FALSE,
-    packages = character(0),
-    imports = "targets",
-    library = "path",
-    envir = new.env(),
-    format = "qs",
-    repository = "aws",
-    repository_meta = "gcp",
-    iteration = "list",
-    error = "continue",
-    memory = "transient",
-    garbage_collection = TRUE,
-    deployment = "main",
-    priority = 0.5,
-    backoff = backoff_init(),
-    resources = tar_resources(qs = tar_resources_qs()),
-    storage = "worker",
-    retrieval = "worker",
-    cue = tar_cue(mode = "never", command = FALSE),
-    debug = "x",
-    workspaces = letters,
-    workspace_on_error = TRUE,
-    seed = 57L,
-    trust_object_timestamps = FALSE
-  )
-  expect_silent(x$validate())
-})
-
-tar_test("export", {
-  x <- options_init(
-    tidy_eval = FALSE,
-    packages = character(0),
-    imports = "targets",
-    library = "path",
-    format = "qs",
-    repository = "aws",
-    repository_meta = "gcp",
-    iteration = "list",
-    error = "continue",
-    memory = "transient",
-    garbage_collection = TRUE,
-    deployment = "main",
-    priority = 0.5,
-    resources = list(ncpu = 2),
-    storage = "worker",
-    retrieval = "worker",
-    cue = tar_cue(mode = "never", command = FALSE),
-    debug = "x",
-    workspaces = letters,
-    workspace_on_error = TRUE,
-    seed = 57L,
-    trust_object_timestamps = FALSE
-  )
-  out <- x$export()
-  exp <- list(
-    tidy_eval = FALSE,
-    packages = character(0),
-    imports = "targets",
-    library = "path",
-    format = "qs",
-    repository = "aws",
-    repository_meta = "gcp",
-    iteration = "list",
-    error = "continue",
-    memory = "transient",
-    garbage_collection = TRUE,
-    deployment = "main",
-    priority = 0.5,
-    resources = list(ncpu = 2),
-    storage = "worker",
-    retrieval = "worker",
-    cue = tar_cue(mode = "never", command = FALSE),
-    debug = "x",
-    workspaces = letters,
-    workspace_on_error = TRUE,
-    seed = 57L,
-    trust_object_timestamps = FALSE
-  )
-  out$cue <- as.list(out$cue)
-  exp$cue <- as.list(exp$cue)
-  expect_equal(out, exp)
-})
-
-tar_test("import", {
-  resources <- tar_resources(qs = tar_resources_qs())
-  list <- list(
-    tidy_eval = FALSE,
-    packages = character(0),
-    imports = "targets",
-    library = "path",
-    format = "qs",
-    repository = "aws",
-    repository_meta = "gcp",
-    iteration = "list",
-    error = "continue",
-    memory = "transient",
-    garbage_collection = TRUE,
-    deployment = "main",
-    priority = 0.5,
-    resources = resources,
-    storage = "worker",
-    retrieval = "worker",
-    cue = tar_cue(mode = "never", command = FALSE),
-    debug = "x",
-    workspaces = "x",
-    workspace_on_error = TRUE,
-    seed = 57L,
-    trust_object_timestamps = FALSE
-  )
-  envir <- new.env(parent = emptyenv())
-  x <- options_init(envir = envir)
-  x$import(list)
-  expect_equal(x$get_tidy_eval(), FALSE)
-  expect_equal(x$get_packages(), character(0))
-  expect_equal(x$get_envir(), envir)
-  expect_equal(x$get_imports(), "targets")
-  expect_equal(x$get_library(), "path")
-  expect_equal(x$get_format(), "qs")
-  expect_equal(x$get_repository(), "aws")
-  expect_equal(x$get_repository_meta(), "gcp")
-  expect_equal(x$get_iteration(), "list")
-  expect_equal(x$get_error(), "continue")
-  expect_equal(x$get_memory(), "transient")
-  expect_equal(x$get_garbage_collection(), TRUE)
-  expect_equal(x$get_deployment(), "main")
-  expect_equal(x$get_priority(), 0.5)
-  expect_equal(x$get_resources(), resources)
-  expect_equal(x$get_storage(), "worker")
-  expect_equal(x$get_retrieval(), "worker")
-  expect_equal(
-    as.list(x$get_cue()),
-    as.list(tar_cue(mode = "never", command = FALSE))
-  )
-  expect_equal(x$get_debug(), "x")
-  expect_equal(x$get_workspaces(), "x")
-  expect_equal(x$get_workspace_on_error(), TRUE)
-  expect_equal(x$get_seed(), 57L)
-  expect_equal(x$get_trust_object_timestamps(), FALSE)
-})
-
 tar_test("tidy_eval", {
   x <- options_init()
   expect_equal(x$get_tidy_eval(), TRUE)
@@ -195,21 +53,9 @@ tar_test("envir", {
   expect_error(x$set_envir(123), class = "tar_condition_validate")
 })
 
-tar_test("format", {
-  x <- options_init()
-  expect_equal(x$get_format(), "rds")
-  x$set_format("qs")
-  expect_equal(x$get_format(), "qs")
-  x$reset()
-  expect_equal(x$get_format(), "rds")
-  expect_error(x$set_format("invalid"), class = "tar_condition_validate")
-})
-
 tar_test("repository", {
   x <- options_init()
   expect_equal(x$get_repository(), "local")
-  x$set_repository("aws")
-  expect_equal(x$get_repository(), "aws")
   x$reset()
   expect_equal(x$get_repository(), "local")
   expect_error(x$set_repository(123), class = "tar_condition_validate")
@@ -218,22 +64,8 @@ tar_test("repository", {
 tar_test("repository_meta", {
   x <- options_init()
   expect_equal(x$get_repository_meta(), "local")
-  x$set_repository("aws")
-  expect_equal(x$get_repository_meta(), "aws")
   x$reset()
   expect_equal(x$get_repository_meta(), "local")
-  expect_error(x$set_repository_meta(123), class = "tar_condition_validate")
-})
-
-tar_test("repository_meta defaults to repository", {
-  x <- options_init()
-  x$set_repository("gcp")
-  expect_equal(x$get_repository_meta(), "gcp")
-  x$set_repository("aws")
-  expect_equal(x$get_repository_meta(), "aws")
-  x$reset()
-  x$set_repository("gcp")
-  expect_equal(x$get_repository_meta(), "gcp")
   expect_error(x$set_repository_meta(123), class = "tar_condition_validate")
 })
 
@@ -330,17 +162,6 @@ tar_test("deprecated backoff", {
   expect_error(x$set_backoff("nope"), class = "tar_condition_validate")
 })
 
-tar_test("resources", {
-  x <- options_init()
-  expect_equal(x$get_resources(), list())
-  resources <- tar_resources(qs = tar_resources_qs())
-  x$set_resources(resources)
-  expect_equal(x$get_resources(), resources)
-  x$reset()
-  expect_equal(x$get_resources(), list())
-  expect_error(x$set_resources(-1), class = "tar_condition_validate")
-})
-
 tar_test("storage", {
   x <- options_init()
   expect_equal(x$get_storage(), "main")
@@ -421,27 +242,6 @@ tar_test("seed", {
   expect_error(x$set_seed(seq_len(4)), class = "tar_condition_validate")
 })
 
-tar_test("controller", {
-  skip_if_not_installed("crew")
-  x <- options_init()
-  expect_silent(x$validate_controller(NULL))
-  expect_silent(
-    x$validate_controller(
-      crew::crew_controller_local(host = "127.0.0.1")
-    )
-  )
-  expect_null(x$get_controller())
-  x$set_controller(crew::crew_controller_local(host = "127.0.0.1"))
-  expect_true(inherits(x$get_controller(), "crew_class_controller"))
-  x$reset()
-  expect_null(x$get_controller())
-  x$set_controller(NULL)
-  expect_null(x$get_controller())
-  expect_error(
-    x$set_controller("?"),
-    class = "tar_condition_validate"
-  )
-})
 
 tar_test("trust_object_timestamps", {
   x <- options_init()

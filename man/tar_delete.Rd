@@ -17,9 +17,7 @@ tar_delete(
 You can supply symbols
 or \code{tidyselect} helpers like \code{\link[=any_of]{any_of()}} and \code{\link[=starts_with]{starts_with()}}.}
 
-\item{cloud}{Logical of length 1, whether to delete objects
-from the cloud if applicable (e.g. AWS, GCP). If \code{FALSE},
-files are not deleted from the cloud.}
+\item{cloud}{Ignored}
 
 \item{batch_size}{Positive integer between 1 and 1000,
 number of target objects to delete
@@ -53,11 +51,6 @@ Local external files files (i.e. \code{format = "file"}
 and \code{repository = "local"}) are not deleted.
 For targets with \code{repository} not equal \code{"local"}, \code{tar_delete()} attempts
 to delete the file and errors out if the deletion is unsuccessful.
-If deletion fails, either log into the cloud platform
-and manually delete the file (e.g. the AWS web console
-in the case of \code{repository = "aws"}) or call
-\code{\link[=tar_invalidate]{tar_invalidate()}} on that target so that \code{targets}
-does not try to delete the object.
 For patterns recorded in the metadata, all the branches
 will be deleted. For patterns no longer in the metadata,
 branches are left alone.

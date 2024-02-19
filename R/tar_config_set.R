@@ -43,8 +43,7 @@
 #'   (depending on the `callr_function` argument).
 #'   If `as_job_` is `TRUE`, then the `rstudioapi` package must be installed.
 #' @param garbage_collection Logical of length 1, `garbage_collection`
-#'   argument of [tar_make()] (if `crew` is enabled),
-#'   [tar_make_clustermq()], and [tar_make_future()].
+#'   argument of [tar_make()] and [tar_make_future()].
 #'   Whether to run garbage collection on the main process
 #'   before sending a target
 #'   to a worker. For [tar_make()], this argument is
@@ -73,7 +72,7 @@
 #' @param seconds_interval Deprecated on 2023-08-24 (version 1.2.2.9001).
 #'   Use `seconds_meta_append`, `seconds_meta_upload`,
 #'   and `seconds_reporter` instead.
-#' @param seconds_meta_append Argument of [tar_make()], [tar_make_clustermq()],
+#' @param seconds_meta_append Argument of [tar_make()], 
 #'   and [tar_make_future()].
 #'   Positive numeric of length 1 with the minimum
 #'   number of seconds between saves to the local metadata and progress files
@@ -83,7 +82,7 @@
 #'   When the pipeline ends,
 #'   all the metadata and progress data is saved immediately,
 #'   regardless of `seconds_meta_append`.
-#' @param seconds_meta_upload Argument of [tar_make()], [tar_make_clustermq()],
+#' @param seconds_meta_upload Argument of [tar_make()], 
 #'   and [tar_make_future()].
 #'   Positive numeric of length 1 with the minimum
 #'   number of seconds between uploads of the metadata and progress data
@@ -94,7 +93,7 @@
 #'   When the pipeline ends,
 #'   all the metadata and progress data is uploaded immediately,
 #'   regardless of `seconds_meta_upload`.
-#' @param seconds_reporter Argument of [tar_make()], [tar_make_clustermq()],
+#' @param seconds_reporter Argument of [tar_make()], 
 #'   and [tar_make_future()]. Positive numeric of length 1 with the minimum
 #'   number of seconds between times when the reporter prints progress
 #'   messages to the R console.
@@ -114,12 +113,8 @@
 #'   with fast read/write access.
 #'   If the argument `NULL`, the setting is not modified.
 #'   Use [tar_config_unset()] to delete a setting.
-#' @param use_crew Logical of length 1, whether to use `crew` in [tar_make()]
-#'   if the `controller` option is set in `tar_option_set()` in the target
-#'   script (`_targets.R`). See <https://books.ropensci.org/targets/crew.html>
-#'   for details.
 #' @param workers Positive numeric of length 1, `workers` argument of
-#'   [tar_make_clustermq()] and related functions that run the pipeline
+#'   related functions that run the pipeline
 #'   with parallel computing among targets.
 #'   If the argument `NULL`, the setting is not modified.
 #'   Use [tar_config_unset()] to delete a setting.
@@ -179,7 +174,6 @@ tar_config_set <- function(
   seconds_interval = NULL,
   store = NULL,
   shortcut = NULL,
-  use_crew = NULL,
   workers = NULL,
   config = Sys.getenv("TAR_CONFIG", "_targets.yaml"),
   project = Sys.getenv("TAR_PROJECT", "main")
@@ -204,7 +198,6 @@ tar_config_set <- function(
   tar_config_assert_seconds_interval(seconds_interval)
   tar_config_assert_shortcut(shortcut)
   tar_config_assert_store(store)
-  tar_config_assert_use_crew(use_crew)
   tar_config_assert_workers(workers)
   yaml <- tar_config_yaml(config = config)
   yaml[[project]]$inherits <- inherits %|||% yaml[[project]]$inherits
@@ -229,7 +222,6 @@ tar_config_set <- function(
     yaml[[project]]$seconds_interval
   yaml[[project]]$shortcut <- shortcut %|||% yaml[[project]]$shortcut
   yaml[[project]]$store <- store %|||% yaml[[project]]$store
-  yaml[[project]]$use_crew <- use_crew %|||% yaml[[project]]$use_crew
   yaml[[project]]$workers <- if_any(
     is.null(workers),
     yaml[[project]]$workers,
@@ -367,15 +359,6 @@ tar_config_assert_store <- function(store) {
   }
   tar_assert_scalar(store)
   tar_assert_chr(store)
-}
-
-tar_config_assert_use_crew <- function(use_crew) {
-  if (is.null(use_crew)) {
-    return()
-  }
-  tar_assert_lgl(use_crew)
-  tar_assert_scalar(use_crew)
-  tar_assert_none_na(use_crew)
 }
 
 tar_config_assert_workers <- function(workers) {

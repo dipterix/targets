@@ -27,12 +27,6 @@ A character vector of dispatched targets.
 \description{
 List the targets with progress status \code{"dispatched"}.
 }
-\details{
-A target is \code{"dispatched"} if it is sent off to be run. Depending
-on your high-performance computing configuration via the \code{crew} package,
-the may not actually start right away. This may happen if the target
-is ready to start but all available parallel workers are busy.
-}
 \examples{
 if (identical(Sys.getenv("TAR_EXAMPLES"), "true")) { # for CRAN
 tar_dir({ # tar_dir() runs code from a temp dir for CRAN.
@@ -57,9 +51,6 @@ Other progress:
 \code{\link{tar_progress}()},
 \code{\link{tar_progress_branches}()},
 \code{\link{tar_progress_summary}()},
-\code{\link{tar_skipped}()},
-\code{\link{tar_watch}()},
-\code{\link{tar_watch_server}()},
-\code{\link{tar_watch_ui}()}
+\code{\link{tar_skipped}()}
 }
 \concept{progress}

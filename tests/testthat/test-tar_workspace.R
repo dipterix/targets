@@ -154,22 +154,6 @@ tar_test("tar_workspace() on a pattern by name", {
   expect_equal(tar_workspaces(), name)
 })
 
-tar_test("tar_workspace() with an nonexportable object", {
-  skip_cran()
-  skip_torch()
-  tar_script({
-    tar_option_set(workspace_on_error = TRUE)
-    list(
-      tar_target(tensor, torch::torch_zeros(10), format = "torch"),
-      tar_target(array, stop(tensor))
-    )
-  })
-  try(tar_make(callr_function = NULL), silent = TRUE)
-  envir <- new.env(parent = globalenv())
-  tar_workspace(array, envir)
-  expect_true(inherits(envir$tensor, "torch_tensor"))
-  expect_equal(as.numeric(sum(envir$tensor)), 0)
-})
 
 tar_test("workspace saved on no error and when target is skipped", {
   skip_cran()

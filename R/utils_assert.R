@@ -581,7 +581,7 @@ tar_assert_store <- function(store) {
       "targets data store", store, "not found.",
       "Utility functions like tar_read() and tar_load() require a",
       "pre-existing targets data store (default: _targets/)",
-      "created by tar_make(), tar_make_clustermq(), or tar_make_future().",
+      "created by tar_make() or tar_make_future().",
       "Details: https://books.ropensci.org/targets/data.html"
     )
   )
@@ -709,14 +709,6 @@ tar_assert_unique_targets <- function(x) {
 # tested in tests/interactive/test-tar_watch.R
 tar_assert_watch_packages <- function() {
   pkgs <- c(
-    "bs4Dash",
-    "DT",
-    "gt",
-    "markdown",
-    "pingr",
-    "shiny",
-    "shinybusy",
-    "shinyWidgets",
     "visNetwork"
   )
   tar_assert_package(pkgs)

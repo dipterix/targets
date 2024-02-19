@@ -3,7 +3,7 @@
 #' @family clean
 #' @description Destroy the data store written by the pipeline.
 #' @details The data store is a folder created by [tar_make()]
-#'   (or [tar_make_future()] or [tar_make_clustermq()]).
+#'   (or [tar_make_future()]).
 #'   The details of the data store are explained at
 #'   <https://books.ropensci.org/targets/data.html#local-data-store>.
 #'   The data store folder contains the output data
@@ -124,14 +124,6 @@ tar_destroy <- function(
   )
   if (destroy %in% c("all", "cloud")) {
     meta <- suppressMessages(tar_meta(store = store))
-    tar_delete_cloud_objects(
-      names = meta$name,
-      meta = meta,
-      path_store = store,
-      batch_size = batch_size,
-      verbose = verbose
-    )
-    tar_delete_cloud_meta(script = script)
     unlink(path_scratch_dir_network(), recursive = TRUE)
   }
   if (tar_should_delete(path = path, ask = ask)) {
@@ -158,11 +150,9 @@ tar_delete_cloud_meta <- function(script) {
   meta <- database_meta(path_store = tempfile())
   progress <- database_progress(path_store = tempfile())
   process <- database_process(path_store = tempfile())
-  crew <- database_crew(path_store = tempfile())
   meta$delete_cloud(verbose = FALSE)
   progress$delete_cloud(verbose = FALSE)
   process$delete_cloud(verbose = FALSE)
-  crew$delete_cloud(verbose = FALSE)
   invisible()
 }
 # nocov end

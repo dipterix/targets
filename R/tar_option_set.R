@@ -57,7 +57,7 @@
 #'
 #'   If `envir` is the global environment, all the promise objects
 #'   are diffused before sending the data to parallel workers
-#'   in [tar_make_future()] and [tar_make_clustermq()],
+#'   in [tar_make_future()] and 
 #'   but otherwise the environment is unmodified.
 #'   This behavior improves performance by decreasing
 #'   the size of data sent to workers.
@@ -82,7 +82,7 @@
 #' @param debug Character vector of names of targets to run in debug mode.
 #'   To use effectively, you must set `callr_function = NULL` and
 #'   restart your R session just before running. You should also
-#'   [tar_make()], [tar_make_clustermq()], or [tar_make_future()].
+#'   [tar_make()] or [tar_make_future()].
 #'   For any target mentioned in `debug`, `targets` will force the target to
 #'   run locally (with `tar_cue(mode = "always")` and `deployment = "main"`
 #'   in the settings) and pause in an interactive debugger to help you diagnose
@@ -121,9 +121,6 @@
 #'   `tar_option_get("seed")` is `NA` will not set a seed.
 #'   In this case, those targets will never be up to date
 #'   unless they have `cue = tar_cue(seed = FALSE)`.
-#' @param controller A controller or controller group object
-#'   produced by the `crew` R package. `crew` brings auto-scaled
-#'   distributed computing to [tar_make()].
 #' @param trust_object_timestamps Logical of length 1, whether to use
 #'   file system modification timestamps to check whether the target output
 #'   data files in `_targets/objects/` are up to date. This is an advanced
@@ -200,7 +197,6 @@ tar_option_set <- function(
   workspaces = NULL,
   workspace_on_error = NULL,
   seed = NULL,
-  controller = NULL,
   trust_object_timestamps = NULL
 ) {
   force(envir)
@@ -239,7 +235,6 @@ tar_option_set <- function(
     tar_options$set_workspace_on_error(workspace_on_error)
   )
   if_any(is.null(seed), NULL, tar_options$set_seed(seed))
-  if_any(is.null(controller), NULL, tar_options$set_controller(controller))
   if_any(
     is.null(trust_object_timestamps),
     NULL,

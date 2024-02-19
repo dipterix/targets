@@ -29,17 +29,6 @@ tar_test("imports_set_package()", {
   expect_true(is.function(imports$head))
 })
 
-tar_test("imports_set_datasets()", {
-  skip_cran()
-  skip_if_not_installed("qs")
-  datasets <- as.character(data(package = "qs")$results[, "Item"])
-  skip_if(!("starnames" %in% datasets))
-  imports <- imports_new(new.env(parent = emptyenv()))
-  expect_null(imports$starnames)
-  imports_set_datasets(imports = imports, package = "qs")
-  expect_true(nrow(imports$starnames) > 0L)
-})
-
 tar_test("imports_init()", {
   tar_option_set(imports = c("utils", "digest"))
   envir <- new.env(parent = emptyenv())
@@ -70,55 +59,3 @@ tar_test("imports_validate()", {
   expect_error(imports_validate(123), class = "tar_condition_validate")
 })
 
-tar_test("imports setting works", {
-  old_warn <- Sys.getenv("TAR_WARN")
-  on.exit({
-    Sys.setenv(TAR_WARN = old_warn)
-    try(detach("package:pkgabcdefg"), silent = TRUE) # nolint
-    tar_option_reset()
-  })
-  Sys.setenv(TAR_WARN = "false") # This test has a good reason for load_all().
-  skip_if_not_installed("pkgload")
-  dir_create("pkg")
-  dir_create(file.path("pkg", "R"))
-  writeLines(
-    "f <- function(x) g(x); g <- function(x) x + 1L",
-    file.path("pkg", "R", "fun.R")
-  )
-  writeLines(
-    c(
-      "Package: pkgabcdefg",
-      "Maintainer: John Doe <e@mail.com>",
-      "Type: Package",
-      "Version: 0.0.1"
-    ),
-    file.path("pkg", "DESCRIPTION")
-  )
-  tar_script({
-    pkgload::load_all("pkg", quiet = TRUE)
-    tar_option_set(imports = "pkgabcdefg")
-    list(tar_target(x, f(1L)))
-  })
-  out <- tar_network(callr_function = NULL)$edges
-  expect_true(any(out$from == "g" & out$to == "f"))
-  expect_true(any(out$from == "f" & out$to == "x"))
-  tar_make(callr_function = NULL)
-  meta <- tar_meta(names = c("f", "g", "x"))
-  expect_true(all(c("f", "g", "x") %in% meta$name))
-  expect_equal(tar_read(x), 2L)
-  # Should be up to date.
-  tar_make(callr_function = NULL)
-  expect_equal(tar_progress(x)$progress, "skipped")
-  out <- tar_outdated(callr_function = NULL, targets_only = FALSE)
-  expect_equal(out, character(0))
-  # Change the inner function.
-  writeLines(
-    "f <- function(x) g(x); g <- function(x) x + 2L",
-    file.path("pkg", "R", "fun.R")
-  )
-  out <- tar_outdated(callr_function = NULL, targets_only = FALSE)
-  expect_true(all(c("f", "g", "x") %in% out))
-  tar_make(callr_function = NULL)
-  expect_equal(tar_progress(x)$progress, "completed")
-  expect_equal(tar_read(x), 3L)
-})

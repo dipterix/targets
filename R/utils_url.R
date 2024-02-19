@@ -1,21 +1,3 @@
-#' @title Random TCP port
-#' @export
-#' @keywords internal
-#' @description Not a user-side function. Exported for infrastructure
-#'   purposes only.
-#' @return A random port not likely to be used by another process.
-#' @param lower Integer of length 1, lowest possible port.
-#' @param upper Integer of length 1, highest possible port.
-#' @examples
-#' if (requireNamespace("parallelly", quietly = TRUE)) {
-#' tar_random_port()
-#' }
-tar_random_port <- function(lower = 49152L, upper = 65355L) {
-  tar_assert_package("parallelly")
-  ports <- seq.int(from = lower, to = upper, by = 1L)
-  parallelly::freePort(ports = ports, default = NA_integer_)
-}
-
 # Tested in tests/interactive/test-class_url.R,
 # not in testthat due to unreliable URLs.
 # nocov start
@@ -168,25 +150,6 @@ url_process_error <- function(url, req, headers) {
     header_text
   )
   tar_throw_run(msg)
-}
-# nocov end
-
-# Tested in tests/interactive/test-tar_watch.R. # nolint
-# nocov start
-url_port <- function(host, port, process, verbose = TRUE) {
-  spin <- cli::make_spinner()
-  if_any(verbose, spin$spin(), NULL)
-  while (!pingr::is_up(destination = host, port = port)) {
-    if_any(
-      process$is_alive(),
-      Sys.sleep(0.01),
-      tar_throw_run(process$read_all_error())
-    )
-    if_any(verbose, spin$spin(), NULL)
-  }
-  if_any(verbose, spin$finish(), NULL)
-  url <- paste0("http://", host, ":", port)
-  utils::browseURL(url)
 }
 # nocov end
 

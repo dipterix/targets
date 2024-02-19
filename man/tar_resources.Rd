@@ -5,73 +5,20 @@
 \title{Target resources}
 \usage{
 tar_resources(
-  aws = tar_option_get("resources")$aws,
-  clustermq = tar_option_get("resources")$clustermq,
-  crew = tar_option_get("resources")$crew,
-  feather = tar_option_get("resources")$feather,
   fst = tar_option_get("resources")$fst,
   future = tar_option_get("resources")$future,
-  gcp = tar_option_get("resources")$gcp,
   network = tar_option_get("resources")$network,
-  parquet = tar_option_get("resources")$parquet,
-  qs = tar_option_get("resources")$qs,
   url = tar_option_get("resources")$url
 )
 }
 \arguments{
-\item{aws}{Output of function \code{tar_resources_aws()}.
-Amazon Web Services (AWS) S3 storage settings for
-\code{tar_target(..., repository = "aws")}.
-See the cloud storage section of
-\url{https://books.ropensci.org/targets/data.html}
-for details for instructions.}
-
-\item{clustermq}{Output of function \code{tar_resources_clustermq()}.
-Optional \code{clustermq} settings for \code{tar_make_clustermq()},
-including the \code{log_worker} and \code{template} arguments of
-\code{clustermq::workers()}. \code{clustermq} workers are \emph{persistent},
-so there is not a one-to-one correspondence between workers and targets.
-The \code{clustermq} resources apply to the workers, not the targets.
-So the correct way to assign \code{clustermq} resources is through
-\code{\link[=tar_option_set]{tar_option_set()}}, not \code{\link[=tar_target]{tar_target()}}. \code{clustermq} resources
-in individual \code{\link[=tar_target]{tar_target()}} calls will be ignored.}
-
-\item{crew}{Output of function \code{tar_resources_crew()}
-with target-specific settings for integration with the
-\code{crew} R package. These settings are arguments to the \code{push()}
-method of the controller or controller group
-object which control things like
-auto-scaling behavior and the controller to use in the case
-of a controller group.}
-
-\item{feather}{Output of function \code{tar_resources_feather()}.
-Non-default arguments to \code{arrow::read_feather()} and
-\code{arrow::write_feather()} for \code{arrow}/feather-based storage formats.
-Applies to all formats ending with the \code{"_feather"} suffix.
-For details on formats, see the \code{format} argument of \code{\link[=tar_target]{tar_target()}}.}
-
 \item{fst}{Output of function \code{tar_resources_fst()}.
 Non-default arguments to \code{fst::read_fst()} and
 \code{fst::write_fst()} for \code{fst}-based storage formats.
 Applies to all formats ending with \code{"fst"} in the name.
 For details on formats, see the \code{format} argument of \code{\link[=tar_target]{tar_target()}}.}
 
-\item{future}{Output of function \code{tar_resources_future()}.
-Optional \code{future} settings for \code{tar_make_future()},
-including the \code{resources} argument of
-\code{future::future()}, which can include values to insert in
-template placeholders in \code{future.batchtools} template files.
-This is how to supply the \code{resources}
-argument of \code{future::future()} for \code{targets}.
-Resources supplied through
-\code{future::plan()} and \code{future::tweak()} are completely ignored.}
-
-\item{gcp}{Output of function \code{tar_resources_gcp()}.
-Google Cloud Storage bucket settings for
-\code{tar_target(..., repository = "gcp")}.
-See the cloud storage section of
-\url{https://books.ropensci.org/targets/data.html}
-for details for instructions.}
+\item{future}{Output of function \code{tar_resources_future()}.}
 
 \item{network}{Output of function \code{tar_resources_network()}.
 Settings to configure how to handle unreliable network connections
@@ -80,21 +27,8 @@ in situations that rely on network file systems or HTTP/HTTPS requests.
 Examples include retries and timeouts for internal storage management
 operations for \code{storage = "worker"} or \code{format = "file"}
 (on network file systems),
-\code{format = "url"}, \code{repository = "aws"}, and
-\code{repository = "gcp"}. These settings do not
+\code{format = "url"}. These settings do not
 apply to actions you take in the custom R command of the target.}
-
-\item{parquet}{Output of function \code{tar_resources_parquet()}.
-Non-default arguments to \code{arrow::read_parquet()} and
-\code{arrow::write_parquet()} for \code{arrow}/parquet-based storage formats.
-Applies to all formats ending with the \code{"_parquet"} suffix.
-For details on formats, see the \code{format} argument of \code{\link[=tar_target]{tar_target()}}.}
-
-\item{qs}{Output of function \code{tar_resources_qs()}.
-Non-default arguments to \code{qs::qread()} and
-\code{qs::qsave()} for \code{qs}-based storage formats.
-Applies to all formats ending with the \code{"_qs"} suffix.
-For details on formats, see the \code{format} argument of \code{\link[=tar_target]{tar_target()}}.}
 
 \item{url}{Output of function \code{tar_resources_url()}.
 Non-default settings for storage formats ending with the \code{"_url"} suffix.
@@ -121,17 +55,6 @@ is a helper to supply those settings in the correct manner.
 
 In \code{targets} version 0.12.2 and above, resources are inherited one-by-one
 in nested fashion from \code{tar_option_get("resources")}.
-For example, suppose you set
-\code{tar_option_set(resources = tar_resources(aws = my_aws))},
-where \code{my_aws} equals \code{tar_resources_aws(bucket = "x", prefix = "y")}.
-Then, \verb{tar_target(data, get_data()} will have bucket \code{"x"} and
-prefix \code{"y"}. In addition, if \code{new_resources} equals
-\verb{tar_resources(aws = tar_resources_aws(bucket = "z")))}, then
-\code{tar_target(data, get_data(), resources = new_resources)}
-will use the new bucket \code{"z"}, but it will still use the prefix \code{"y"}
-supplied through \code{tar_option_set()}. (In \code{targets} 0.12.1 and below,
-options like \code{prefix} do not carry over from \code{tar_option_set()} if you
-supply non-default resources to \code{tar_target()}.)
 }
 
 \examples{
@@ -139,25 +62,16 @@ supply non-default resources to \code{tar_target()}.)
 tar_target(
   name,
   command(),
-  format = "qs",
   resources = tar_resources(
-    qs = tar_resources_qs(preset = "fast"),
     future = tar_resources_future(resources = list(n_cores = 1))
   )
 )
 }
 \seealso{
 Other resources: 
-\code{\link{tar_resources_aws}()},
-\code{\link{tar_resources_clustermq}()},
-\code{\link{tar_resources_crew}()},
-\code{\link{tar_resources_feather}()},
 \code{\link{tar_resources_fst}()},
 \code{\link{tar_resources_future}()},
-\code{\link{tar_resources_gcp}()},
 \code{\link{tar_resources_network}()},
-\code{\link{tar_resources_parquet}()},
-\code{\link{tar_resources_qs}()},
 \code{\link{tar_resources_url}()}
 }
 \concept{resources}

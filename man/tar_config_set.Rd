@@ -19,7 +19,6 @@ tar_config_set(
   seconds_interval = NULL,
   store = NULL,
   shortcut = NULL,
-  use_crew = NULL,
   workers = NULL,
   config = Sys.getenv("TAR_CONFIG", "_targets.yaml"),
   project = Sys.getenv("TAR_PROJECT", "main")
@@ -40,8 +39,7 @@ Use \code{\link[=tar_config_unset]{tar_config_unset()}} to delete a setting.}
 If \code{as_job_} is \code{TRUE}, then the \code{rstudioapi} package must be installed.}
 
 \item{garbage_collection}{Logical of length 1, \code{garbage_collection}
-argument of \code{\link[=tar_make]{tar_make()}} (if \code{crew} is enabled),
-\code{\link[=tar_make_clustermq]{tar_make_clustermq()}}, and \code{\link[=tar_make_future]{tar_make_future()}}.
+argument of \code{\link[=tar_make]{tar_make()}} and \code{\link[=tar_make_future]{tar_make_future()}}.
 Whether to run garbage collection on the main process
 before sending a target
 to a worker. For \code{\link[=tar_make]{tar_make()}}, this argument is
@@ -73,7 +71,7 @@ run the script from the current working directory.
 If the argument \code{NULL}, the setting is not modified.
 Use \code{\link[=tar_config_unset]{tar_config_unset()}} to delete a setting.}
 
-\item{seconds_meta_append}{Argument of \code{\link[=tar_make]{tar_make()}}, \code{\link[=tar_make_clustermq]{tar_make_clustermq()}},
+\item{seconds_meta_append}{Argument of \code{\link[=tar_make]{tar_make()}},
 and \code{\link[=tar_make_future]{tar_make_future()}}.
 Positive numeric of length 1 with the minimum
 number of seconds between saves to the local metadata and progress files
@@ -84,7 +82,7 @@ When the pipeline ends,
 all the metadata and progress data is saved immediately,
 regardless of \code{seconds_meta_append}.}
 
-\item{seconds_meta_upload}{Argument of \code{\link[=tar_make]{tar_make()}}, \code{\link[=tar_make_clustermq]{tar_make_clustermq()}},
+\item{seconds_meta_upload}{Argument of \code{\link[=tar_make]{tar_make()}},
 and \code{\link[=tar_make_future]{tar_make_future()}}.
 Positive numeric of length 1 with the minimum
 number of seconds between uploads of the metadata and progress data
@@ -96,7 +94,7 @@ When the pipeline ends,
 all the metadata and progress data is uploaded immediately,
 regardless of \code{seconds_meta_upload}.}
 
-\item{seconds_reporter}{Argument of \code{\link[=tar_make]{tar_make()}}, \code{\link[=tar_make_clustermq]{tar_make_clustermq()}},
+\item{seconds_reporter}{Argument of \code{\link[=tar_make]{tar_make()}},
 and \code{\link[=tar_make_future]{tar_make_future()}}. Positive numeric of length 1 with the minimum
 number of seconds between times when the reporter prints progress
 messages to the R console.}
@@ -123,13 +121,8 @@ to \code{\link[=tar_make]{tar_make()}} and related functions.
 If the argument \code{NULL}, the setting is not modified.
 Use \code{\link[=tar_config_unset]{tar_config_unset()}} to delete a setting.}
 
-\item{use_crew}{Logical of length 1, whether to use \code{crew} in \code{\link[=tar_make]{tar_make()}}
-if the \code{controller} option is set in \code{tar_option_set()} in the target
-script (\verb{_targets.R}). See \url{https://books.ropensci.org/targets/crew.html}
-for details.}
-
 \item{workers}{Positive numeric of length 1, \code{workers} argument of
-\code{\link[=tar_make_clustermq]{tar_make_clustermq()}} and related functions that run the pipeline
+related functions that run the pipeline
 with parallel computing among targets.
 If the argument \code{NULL}, the setting is not modified.
 Use \code{\link[=tar_config_unset]{tar_config_unset()}} to delete a setting.}

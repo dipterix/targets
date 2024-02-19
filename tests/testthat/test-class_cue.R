@@ -240,57 +240,6 @@ tar_test("cue_depend() suppressed", {
   expect_equal(out, "x")
 })
 
-tar_test("cue_format()", {
-  skip_if_not_installed("qs")
-  x <- target_init("x", quote(1L), format = "rds")
-  local <- local_init(pipeline_init(list(x)))
-  local$run()
-  out <- counter_get_names(local$scheduler$progress$completed)
-  expect_equal(out, "x")
-  x <- target_init("x", quote(1L), format = "qs")
-  local <- local_init(pipeline_init(list(x)))
-  local$run()
-  out <- counter_get_names(local$scheduler$progress$completed)
-  expect_equal(out, "x")
-})
-
-tar_test("cue_format() suppressed", {
-  skip_if_not_installed("qs")
-  cue <- cue_init(format = FALSE)
-  x <- target_init("x", quote(1L), format = "rds", cue = cue)
-  local <- local_init(pipeline_init(list(x)))
-  local$run()
-  out <- counter_get_names(local$scheduler$progress$completed)
-  expect_equal(out, "x")
-  x <- target_init("x", quote(1L), format = "qs", cue = cue)
-  local <- local_init(pipeline_init(list(x)))
-  local$run()
-  out <- counter_get_names(local$scheduler$progress$skipped)
-  expect_equal(out, "x")
-})
-
-tar_test("cue_repository()", {
-  skip_if_not_installed("paws.storage")
-  tar_script(tar_target(x, 1, repository = "local"))
-  tar_make(callr_function = NULL)
-  expect_equal(tar_outdated(callr_function = NULL), character(0))
-  tar_script(tar_target(x, 1, repository = "aws"))
-  expect_equal(tar_outdated(callr_function = NULL), "x")
-})
-
-tar_test("cue_repository() suppressed", {
-  skip_if_not_installed("paws.storage")
-  tar_script(
-    tar_target(x, 1, repository = "local", cue = tar_cue(repository = FALSE))
-  )
-  tar_make(callr_function = NULL)
-  expect_equal(tar_outdated(callr_function = NULL), character(0))
-  tar_script(
-    tar_target(x, 1, repository = "aws", cue = tar_cue(repository = FALSE))
-  )
-  expect_equal(tar_outdated(callr_function = NULL), "x")
-})
-
 tar_test("cue_iteration()", {
   x <- target_init("x", quote(1L), iteration = "vector")
   local <- local_init(pipeline_init(list(x)))

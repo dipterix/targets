@@ -14,7 +14,7 @@ tar_debug_instructions <- function() {
   }
   deparsed <- targets::tar_deparse_safe(expr)
   text <- paste("    ", deparsed)
-  cli_mark_info(
+  mark_info(
     sprintf(
       "You are now running an interactive debugger in target %s.",
       name
@@ -25,7 +25,7 @@ tar_debug_instructions <- function() {
   )
   cli_blank("How to use: https://adv-r.hadley.nz/debugging.html#browser")
   message()
-  cli_mark_info(
+  mark_info(
     paste0(
       "The debugger is poised to run the command of target ",
       name, ":"
@@ -34,7 +34,7 @@ tar_debug_instructions <- function() {
   message()
   message(text)
   message()
-  cli_mark_info("Tip: run debug(your_function) and then enter \"c\"")
+  mark_info("Tip: run debug(your_function) and then enter \"c\"")
   cli_blank("to move the debugger inside your_function(),")
   cli_blank(
     sprintf(

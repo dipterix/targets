@@ -21,7 +21,6 @@
 tar_active <- function() {
   funs <- c(
     "tar_make",
-    "tar_make_clustermq",
     "tar_make_future"
   )
   !is.null(tar_runtime$fun) && tar_runtime$fun %in% funs

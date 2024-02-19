@@ -11,8 +11,6 @@
 #'   `future` is not a strict dependency of `targets`,
 #'   so you must install `future` yourself.
 #'
-#'   To configure `tar_make_future()` with a computing cluster,
-#'   see the `future.batchtools` package documentation.
 #' @inheritSection tar_meta Storage access
 #' @return `NULL` except if `callr_function = callr::r_bg()`, in which case
 #'   a handle to the `callr` background process is returned. Either way,
@@ -20,10 +18,6 @@
 #' @inheritParams tar_make
 #' @param workers Positive integer, maximum number of transient
 #'   `future` workers allowed to run at any given time.
-#' @param garbage_collection Logical of length 1, whether to run garbage
-#'   collection on the main process before sending a target to a worker.
-#'   Independent from the `garbage_collection` argument of [tar_target()],
-#'   which controls garbage collection on the worker.
 #' @examples
 #' if (identical(Sys.getenv("TAR_EXAMPLES"), "true")) { # for CRAN
 #' tar_dir({ # tar_dir() runs code from a temp dir for CRAN.
@@ -50,8 +44,7 @@ tar_make_future <- function(
   callr_arguments = targets::tar_callr_args_default(callr_function, reporter),
   envir = parent.frame(),
   script = targets::tar_config_get("script"),
-  store = targets::tar_config_get("store"),
-  garbage_collection = targets::tar_config_get("garbage_collection")
+  store = targets::tar_config_get("store")
 ) {
   tar_assert_allow_meta("tar_make_future", store)
   force(envir)
@@ -77,9 +70,6 @@ tar_make_future <- function(
   tar_assert_none_na(seconds_reporter)
   tar_assert_ge(seconds_reporter, 0)
   tar_deprecate_seconds_interval(seconds_interval)
-  tar_assert_lgl(garbage_collection)
-  tar_assert_scalar(garbage_collection)
-  tar_assert_none_na(garbage_collection)
   targets_arguments <- list(
     path_store = store,
     names_quosure = rlang::enquo(names),
@@ -88,7 +78,6 @@ tar_make_future <- function(
     seconds_meta_append = seconds_meta_append,
     seconds_meta_upload = seconds_meta_upload,
     seconds_reporter = seconds_reporter,
-    garbage_collection = garbage_collection,
     workers = workers
   )
   out <- callr_outer(
@@ -113,8 +102,8 @@ tar_make_future_inner <- function(
   seconds_meta_append,
   seconds_meta_upload,
   seconds_reporter,
-  garbage_collection,
-  workers
+  workers,
+  ...
 ) {
   names <- tar_tidyselect_eval(names_quosure, pipeline_get_names(pipeline))
   future_init(
@@ -127,7 +116,6 @@ tar_make_future_inner <- function(
     seconds_meta_append = seconds_meta_append,
     seconds_meta_upload = seconds_meta_upload,
     seconds_reporter = seconds_reporter,
-    garbage_collection = garbage_collection,
     workers = workers
   )$run()
   invisible()

@@ -25,21 +25,6 @@
 #' @section Storage formats:
 #'   * `"rds"`: Default, uses `saveRDS()` and `readRDS()`. Should work for
 #'     most objects, but slow.
-#'   * `"qs"`: Uses `qs::qsave()` and `qs::qread()`. Should work for
-#'     most objects, much faster than `"rds"`. Optionally set the
-#'     preset for `qsave()` through `tar_resources()` and `tar_resources_qs()`.
-#'   * `"feather"`: Uses `arrow::write_feather()` and
-#'     `arrow::read_feather()` (version 2.0). Much faster than `"rds"`,
-#'     but the value must be a data frame. Optionally set
-#'     `compression` and `compression_level` in `arrow::write_feather()`
-#'     through `tar_resources()` and `tar_resources_feather()`.
-#'     Requires the `arrow` package (not installed by default).
-#'   * `"parquet"`: Uses `arrow::write_parquet()` and
-#'     `arrow::read_parquet()` (version 2.0). Much faster than `"rds"`,
-#'     but the value must be a data frame. Optionally set
-#'     `compression` and `compression_level` in `arrow::write_parquet()`
-#'     through `tar_resources()` and `tar_resources_parquet()`.
-#'     Requires the `arrow` package (not installed by default).
 #'   * `"fst"`: Uses `fst::write_fst()` and `fst::read_fst()`.
 #'     Much faster than `"rds"`, but the value must be
 #'     a data frame. Optionally set the compression level for
@@ -51,17 +36,6 @@
 #'     Optionally set the compression level the same way as for `"fst"`.
 #'   * `"fst_tbl"`: Same as `"fst"`, but the value is a `tibble`.
 #'     Optionally set the compression level the same way as for `"fst"`.
-#'   * `"keras"`: superseded by [tar_format()] and incompatible
-#'     with `error = "null"` (in [tar_target()] or [tar_option_set()]).
-#'     Uses `keras::save_model_hdf5()` and
-#'     `keras::load_model_hdf5()`. The value must be a Keras model.
-#'     Requires the `keras` package (not installed by default).
-#'   * `"torch"`: superseded by [tar_format()] and incompatible
-#'     with `error = "null"` (in [tar_target()] or [tar_option_set()]).
-#'     Uses `torch::torch_save()` and `torch::torch_load()`.
-#'     The value must be an object from the `torch` package
-#'     such as a tensor or neural network module.
-#'     Requires the `torch` package (not installed by default).
 #'   * `"file"`: A dynamic file. To use this format,
 #'     the target needs to manually identify or save some data
 #'     and return a character vector of paths
@@ -127,17 +101,6 @@
 #' @param repository Character of length 1, remote repository for target
 #'   storage. Choices:
 #'   * `"local"`: file system of the local machine.
-#'   * `"aws"`: Amazon Web Services (AWS) S3 bucket. Can be configured
-#'     with a non-AWS S3 bucket using the `endpoint` argument of
-#'     [tar_resources_aws()], but versioning capabilities may be lost
-#'     in doing so.
-#'     See the cloud storage section of
-#'     <https://books.ropensci.org/targets/data.html>
-#'     for details for instructions.
-#'   * `"gcp"`: Google Cloud Platform storage bucket.
-#'     See the cloud storage section of
-#'     <https://books.ropensci.org/targets/data.html>
-#'     for details for instructions.
 #'
 #'   Note: if `repository` is not `"local"` and `format` is `"file"`
 #'   then the target should create a single output file.
@@ -150,16 +113,6 @@
 #'     aggregation happens with `vctrs::vec_c()`.
 #'   * `"list"`, branching happens with `[[]]` and aggregation happens with
 #'     `list()`.
-#'   * `"group"`: `dplyr::group_by()`-like functionality to branch over
-#'     subsets of a non-dynamic data frame.
-#'     For `iteration = "group"`, the target must not by dynamic
-#'     (the `pattern` argument of [tar_target()] must be left `NULL`).
-#'     The target's return value must be a data
-#'     frame with a special `tar_group` column of consecutive integers
-#'     from 1 through the number of groups. Each integer designates a group,
-#'     and a branch is created for each collection of rows in a group.
-#'     See the [tar_group()] function to see how you can
-#'     create the special `tar_group` column with `dplyr::group_by()`.
 #' @return A target object. Users should not modify these directly,
 #'   just feed them to [list()] in your target script file
 #'   (default: `_targets.R`).
@@ -247,8 +200,7 @@
 #'   functionality, alternative data storage formats,
 #'   and other optional capabilities of `targets`.
 #'   See `tar_resources()` for details.
-#' @param storage Character of length 1, only relevant to
-#'   [tar_make_clustermq()] and [tar_make_future()].
+#' @param storage Character of length 1, only relevant to [tar_make_future()].
 #'   Must be one of the following values:
 #'   * `"main"`: the target's return value is sent back to the
 #'   host machine and saved/uploaded locally.
@@ -274,8 +226,7 @@
 #'     downstream targets will automatically try to load the data
 #'     from the data store as a dependency. As a corollary, `storage = "none"`
 #'     is completely unnecessary if `format` is `"file"`.
-#' @param retrieval Character of length 1, only relevant to
-#'   [tar_make_clustermq()] and [tar_make_future()].
+#' @param retrieval Character of length 1, only relevant to [tar_make_future()].
 #'   Must be one of the following values:
 #'   * `"main"`: the target's dependencies are loaded on the host machine
 #'     and sent to the worker before the target runs.

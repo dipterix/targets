@@ -66,8 +66,6 @@ tar_test("envir", {
 
 tar_test("format", {
   expect_equal(tar_option_get("format"), "rds")
-  tar_option_set(format = "qs")
-  expect_equal(tar_option_get("format"), "qs")
   tar_option_reset()
   expect_equal(tar_option_get("format"), "rds")
   expect_error(
@@ -78,8 +76,6 @@ tar_test("format", {
 
 tar_test("repository", {
   expect_equal(tar_option_get("repository"), "local")
-  tar_option_set(repository = "aws")
-  expect_equal(tar_option_get("repository"), "aws")
   tar_option_reset()
   expect_equal(tar_option_get("repository"), "local")
   expect_error(
@@ -90,24 +86,8 @@ tar_test("repository", {
 
 tar_test("repository_meta", {
   expect_equal(tar_option_get("repository_meta"), "local")
-  tar_option_set(repository_meta = "aws")
-  expect_equal(tar_option_get("repository_meta"), "aws")
   tar_option_reset()
   expect_equal(tar_option_get("repository_meta"), "local")
-  expect_error(
-    tar_option_set(repository_meta = 123),
-    class = "tar_condition_validate"
-  )
-})
-
-tar_test("repository_meta", {
-  tar_option_set(repository = "gcp")
-  expect_equal(tar_option_get("repository_meta"), "gcp")
-  tar_option_set(repository_meta = "aws")
-  expect_equal(tar_option_get("repository_meta"), "aws")
-  tar_option_reset()
-  tar_option_set(repository = "gcp")
-  expect_equal(tar_option_get("repository_meta"), "gcp")
   expect_error(
     tar_option_set(repository_meta = 123),
     class = "tar_condition_validate"
@@ -236,10 +216,6 @@ tar_test("deprecated backoff", {
 })
 
 tar_test("resources", {
-  resources <- tar_resources(qs = tar_resources_qs())
-  expect_equal(tar_option_get("resources"), list())
-  tar_option_set(resources = resources)
-  expect_equal(tar_option_get("resources"), resources)
   tar_option_reset()
   expect_equal(tar_option_get("resources"), list())
   expect_error(
@@ -332,23 +308,6 @@ tar_test("seed", {
   expect_equal(tar_option_get("seed"), 0L)
   expect_error(
     tar_option_set(seed = "?"),
-    class = "tar_condition_validate"
-  )
-})
-
-tar_test("controller", {
-  skip_if_not_installed("crew")
-  expect_null(tar_option_get("controller"))
-  tar_option_set(
-    controller = crew::crew_controller_local(host = "127.0.0.1")
-  )
-  expect_true(inherits(tar_option_get("controller"), "crew_class_controller"))
-  tar_option_reset()
-  expect_null(tar_option_get("controller"))
-  tar_option_set(controller = NULL)
-  expect_null(tar_option_get("controller"))
-  expect_error(
-    tar_option_set(controller = "?"),
     class = "tar_condition_validate"
   )
 })

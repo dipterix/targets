@@ -16,9 +16,7 @@ tar_prune(
 )
 }
 \arguments{
-\item{cloud}{Logical of length 1, whether to delete objects
-from the cloud if applicable (e.g. AWS, GCP). If \code{FALSE},
-files are not deleted from the cloud.}
+\item{cloud}{Ignored}
 
 \item{batch_size}{Positive integer between 1 and 1000,
 number of target objects to delete
@@ -94,7 +92,7 @@ multiple changes to your project and are now trying to
 discard irrelevant data while keeping the results that still matter.
 Global objects and local files with \code{format = "file"} outside the
 data store are unaffected. Also removes \verb{_targets/scratch/},
-which is only needed while \code{\link[=tar_make]{tar_make()}}, \code{\link[=tar_make_clustermq]{tar_make_clustermq()}},
+which is only needed while \code{\link[=tar_make]{tar_make()}}
 or \code{\link[=tar_make_future]{tar_make_future()}} is running. To list the targets that will be
 pruned without actually removing anything, use \code{\link[=tar_prune_list]{tar_prune_list()}}.
 }

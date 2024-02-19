@@ -16,9 +16,7 @@
 #'   * `progress`: the most recent progress update of that target.
 #'     Could be `"dispatched"`, `"completed"`, "`skipped`", `"canceled"`,
 #'       or `"errored"`. `"dispatched"` means the target was sent off
-#'       to be run, but in the case of `tar_make()` with a `crew` controller,
-#'       the target might not actually start running right away if the `crew`
-#'       workers are all busy.
+#'       to be run.
 #' @inheritParams tar_validate
 #' @param names Optional, names of the targets. If supplied, `tar_progress()`
 #'   only returns progress information on these targets.

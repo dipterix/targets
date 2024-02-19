@@ -22,8 +22,8 @@ options_init <- function(
   workspaces = NULL,
   workspace_on_error = NULL,
   seed = NULL,
-  controller = NULL,
-  trust_object_timestamps = NULL
+  trust_object_timestamps = NULL,
+  ...
 ) {
   options_new(
     tidy_eval = tidy_eval,
@@ -49,7 +49,6 @@ options_init <- function(
     workspaces = workspaces,
     workspace_on_error = workspace_on_error,
     seed = seed,
-    controller = controller,
     trust_object_timestamps = trust_object_timestamps
   )
 }
@@ -78,8 +77,8 @@ options_new <- function(
   workspaces = NULL,
   workspace_on_error = NULL,
   seed = NULL,
-  controller = NULL,
-  trust_object_timestamps = NULL
+  trust_object_timestamps = NULL,
+  ...
 ) {
   options_class$new(
     tidy_eval = tidy_eval,
@@ -105,7 +104,6 @@ options_new <- function(
     workspaces = workspaces,
     workspace_on_error = workspace_on_error,
     seed = seed,
-    controller = controller,
     trust_object_timestamps = trust_object_timestamps
   )
 }
@@ -139,7 +137,6 @@ options_class <- R6::R6Class(
     workspaces = NULL,
     workspace_on_error = NULL,
     seed = NULL,
-    controller = NULL,
     trust_object_timestamps = NULL,
     initialize = function(
       tidy_eval = NULL,
@@ -165,7 +162,6 @@ options_class <- R6::R6Class(
       workspaces = NULL,
       workspace_on_error = NULL,
       seed = NULL,
-      controller = NULL,
       trust_object_timestamps = NULL
     ) {
       self$tidy_eval <- tidy_eval
@@ -191,7 +187,6 @@ options_class <- R6::R6Class(
       self$workspaces <- workspaces
       self$workspace_on_error <- workspace_on_error
       self$seed <- seed
-      self$controller <- controller
       self$trust_object_timestamps <- trust_object_timestamps
     },
     export = function() {
@@ -268,7 +263,6 @@ options_class <- R6::R6Class(
       self$workspaces <- NULL
       self$workspace_on_error <- NULL
       self$seed <- NULL
-      self$controller <- NULL
       self$trust_object_timestamps <- NULL
     },
     get_tidy_eval = function() {
@@ -339,9 +333,6 @@ options_class <- R6::R6Class(
     },
     get_seed = function() {
       self$seed %|||% 0L
-    },
-    get_controller = function() {
-      self$controller
     },
     get_trust_object_timestamps = function() {
       self$trust_object_timestamps %|||% TRUE
@@ -448,10 +439,6 @@ options_class <- R6::R6Class(
       self$validate_seed(seed)
       self$seed <- as.integer(seed)
     },
-    set_controller = function(controller) {
-      self$validate_controller(controller)
-      self$controller <- controller
-    },
     set_trust_object_timestamps = function(trust_object_timestamps) {
       self$validate_trust_object_timestamps(trust_object_timestamps)
       self$trust_object_timestamps <- trust_object_timestamps
@@ -547,11 +534,6 @@ options_class <- R6::R6Class(
         tar_assert_dbl(seed)
       }
     },
-    validate_controller = function(controller) {
-      if (!is.null(controller)) {
-        validate_crew_controller(controller)
-      }
-    },
     validate_trust_object_timestamps = function(trust_object_timestamps) {
       if (!is.null(trust_object_timestamps)) {
         tar_assert_lgl(trust_object_timestamps)
@@ -583,7 +565,6 @@ options_class <- R6::R6Class(
       self$validate_workspaces(self$get_workspaces())
       self$validate_workspace_on_error(self$get_workspace_on_error())
       self$validate_seed(self$get_seed())
-      self$validate_controller(self$get_controller())
       self$validate_trust_object_timestamps(self$get_trust_object_timestamps())
     }
   )

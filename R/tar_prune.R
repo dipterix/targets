@@ -13,7 +13,7 @@
 #'   discard irrelevant data while keeping the results that still matter.
 #'   Global objects and local files with `format = "file"` outside the
 #'   data store are unaffected. Also removes `_targets/scratch/`,
-#'   which is only needed while [tar_make()], [tar_make_clustermq()],
+#'   which is only needed while [tar_make()]
 #'   or [tar_make_future()] is running. To list the targets that will be
 #'   pruned without actually removing anything, use [tar_prune_list()].
 #' @return `NULL` except if `callr_function` is `callr::r_bg`, in which case
@@ -83,7 +83,7 @@ tar_prune <- function(
   invisible(out)
 }
 
-tar_prune_inner <- function(pipeline, cloud, path_store, batch_size, verbose) {
+tar_prune_inner <- function(pipeline, path_store, batch_size, verbose, ...) {
   tar_assert_store(path_store)
   names <- pipeline_get_names(pipeline)
   meta <- meta_init(path_store = path_store)
@@ -96,15 +96,6 @@ tar_prune_inner <- function(pipeline, cloud, path_store, batch_size, verbose) {
   dynamic_files <- data$name[data$format == "file"]
   discard <- setdiff(discard, dynamic_files)
   discard <- setdiff(discard, data$name[data$type == "pattern"])
-  if (cloud) {
-    tar_delete_cloud_objects(
-      names = discard,
-      meta = data,
-      path_store = path_store,
-      batch_size = batch_size,
-      verbose = verbose
-    )
-  }
   data <- as_data_frame(data)[data$name %in% keep, ]
   meta$database$overwrite_storage(data)
   unlink(file.path(path_objects_dir(path_store), discard), recursive = TRUE)

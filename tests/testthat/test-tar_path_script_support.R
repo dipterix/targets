@@ -2,7 +2,7 @@ tar_test("tar_path_script() outside a pipeline", {
   script <- tar_config_get("script")
   expect_equal(
     tar_path_script_support(),
-    paste0(tools::file_path_sans_ext(script), "_r")
+    paste0(file_path_sans_ext(script), "_r")
   )
   tar_config_set(script = "example_script")
   expect_equal(tar_path_script_support(), "example_script_r")
